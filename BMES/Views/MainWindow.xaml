@@ -1,0 +1,12 @@
+﻿<Window x:Class="BMES.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:BMES"
+        xmlns:Regions="clr-namespace:BMES.Regions;assembly=BMES.Regions"
+        xmlns:prism="http://prismlibrary.com/"
+        prism:ViewModelLocator.AutoWireViewModel="True"
+        Title="{Binding Title}" Height="350" Width="525" >
+    <Grid>
+        <ContentControl prism:RegionManager.RegionName="{x:Static Regions:RegionNames.ContentRegion}" />
+    </Grid>
+</Window>
