@@ -1,8 +1,11 @@
 ﻿using System.Windows;
 using BMES.Core;
 using BMES.Core.Interfaces;
+using BMES.Modules.Header;
+using BMES.Modules.LeftMenu;
 using BMES.Views;
 using Prism.Ioc;
+using Prism.Modularity;
 
 namespace BMES
 {
@@ -18,7 +21,13 @@ namespace BMES
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            containerRegistry.RegisterSingleton<IOpcUaClient, OpcUaClient>();
+            //containerRegistry.RegisterSingleton<IOpcUaClient, OpcUaClient>();
+        }
+        protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)
+        {
+            base.ConfigureModuleCatalog(moduleCatalog);
+            moduleCatalog.AddModule<HeaderModule>();
+            moduleCatalog.AddModule<LeftMenuModule>();
         }
     }
 }
