@@ -11,76 +11,110 @@
     prism:ViewModelLocator.AutoWireViewModel="True"
     mc:Ignorable="d">
     <UserControl.Resources>
-        <!-- Главное меню -->
-        <Path x:Key="HomeIcon" Data="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" Fill="White" Stretch="Uniform"/>
-        <!-- Управление -->
-        <Path x:Key="ControlIcon" Data="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z" Fill="White" Stretch="Uniform"/>
-        <!-- Статистика -->
-        <Path x:Key="StatsIcon" Data="M5 9.2h3V19H5zM10.6 5h2.8v14h-2.8zm5.6 8H19v6h-2.8z" Fill="White" Stretch="Uniform"/>
-        <!-- Устройства -->
-        <Path x:Key="DeviceIcon" Data="M20 17H4V3h16v14zM4 15h16V5H4v10zM18 7H6v2h12V7zM18 11H6v2h12v-2z" Fill="White" Stretch="Uniform"/>
-        <!-- Прочее -->
-        <Path x:Key="MoreIcon" Data="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" Fill="White" Stretch="Uniform"/>
+        <!--  Главное меню  -->
+        <Path
+            x:Key="HomeIcon"
+            Data="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"
+            Fill="White"
+            Stretch="Uniform" />
+        <!--  Управление  -->
+        <Path
+            x:Key="ControlIcon"
+            Data="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z"
+            Fill="White"
+            Stretch="Uniform" />
+        <!--  Статистика  -->
+        <Path
+            x:Key="StatsIcon"
+            Data="M5 9.2h3V19H5zM10.6 5h2.8v14h-2.8zm5.6 8H19v6h-2.8z"
+            Fill="White"
+            Stretch="Uniform" />
+        <!--  Устройства  -->
+        <Path
+            x:Key="DeviceIcon"
+            Data="M20 17H4V3h16v14zM4 15h16V5H4v10zM18 7H6v2h12V7zM18 11H6v2h12v-2z"
+            Fill="White"
+            Stretch="Uniform" />
+        <!--  Прочее  -->
+        <Path
+            x:Key="MoreIcon"
+            Data="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"
+            Fill="White"
+            Stretch="Uniform" />
     </UserControl.Resources>
     <Grid Background="#23272A">
         <Grid.Resources>
             <Style x:Key="LeftMenuButtonStyle" TargetType="RadioButton">
-                <Setter Property="Background" Value="Transparent"/>
-                <Setter Property="Foreground" Value="#FFFFFF"/>
-                <Setter Property="BorderThickness" Value="0"/>
-                <Setter Property="Padding" Value="0"/>
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Foreground" Value="#FFFFFF" />
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="Padding" Value="0" />
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="RadioButton">
                             <Grid>
-                                <Border x:Name="HighlightBorder" BorderBrush="#FFFFFF" BorderThickness="2,0,0,0" HorizontalAlignment="Left" Visibility="Collapsed"/>
-                                <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
-                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <Border
+                                    x:Name="MainBorder"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                                 </Border>
+                                <Border
+                                    x:Name="HighlightBorder"
+                                    HorizontalAlignment="Left"
+                                    BorderBrush="#FFFFFF"
+                                    BorderThickness="2,0,0,0"
+                                    Visibility="Collapsed" />
                             </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="MainBorder" Property="Background" Value="#3C4043" />
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter TargetName="MainBorder" Property="Background" Value="#505457" />
+                                </Trigger>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter TargetName="MainBorder" Property="Background" Value="#505457" />
+                                    <Setter TargetName="HighlightBorder" Property="Visibility" Value="Visible" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
-                <Style.Triggers>
-                    <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Background" Value="#3C4043"/>
-                    </Trigger>
-                    <Trigger Property="IsPressed" Value="True">
-                        <Setter Property="Background" Value="#505457"/>
-                    </Trigger>
-                    <Trigger Property="IsChecked" Value="True">
-                        <Setter Property="Background" Value="#505457"/>
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="RadioButton">
-                                    <Grid>
-                                        <Border x:Name="HighlightBorder" BorderBrush="#FFFFFF" BorderThickness="2,0,0,0" HorizontalAlignment="Left" Visibility="Visible"/>
-                                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
-                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                        </Border>
-                                    </Grid>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Trigger>
-                </Style.Triggers>
             </Style>
         </Grid.Resources>
         <StackPanel>
-            <RadioButton Style="{StaticResource LeftMenuButtonStyle}" Height="50" ToolTip="Главное меню" IsChecked="True">
-                <ContentControl Width="24" Content="{StaticResource HomeIcon}"/>
+            <RadioButton
+                Height="50"
+                IsChecked="True"
+                Style="{StaticResource LeftMenuButtonStyle}"
+                ToolTip="Главное меню">
+                <ContentControl Width="24" Content="{StaticResource HomeIcon}" />
             </RadioButton>
-            <RadioButton Style="{StaticResource LeftMenuButtonStyle}" Height="50" ToolTip="Управление">
-                <ContentControl Width="24" Content="{StaticResource ControlIcon}"/>
+            <RadioButton
+                Height="50"
+                Style="{StaticResource LeftMenuButtonStyle}"
+                ToolTip="Управление">
+                <ContentControl Width="24" Content="{StaticResource ControlIcon}" />
             </RadioButton>
-            <RadioButton Style="{StaticResource LeftMenuButtonStyle}" Height="50" ToolTip="Статистика">
-                <ContentControl Width="24" Content="{StaticResource StatsIcon}"/>
+            <RadioButton
+                Height="50"
+                Style="{StaticResource LeftMenuButtonStyle}"
+                ToolTip="Статистика">
+                <ContentControl Width="24" Content="{StaticResource StatsIcon}" />
             </RadioButton>
-            <RadioButton Style="{StaticResource LeftMenuButtonStyle}" Height="50" ToolTip="Устройства">
-                <ContentControl Width="24" Content="{StaticResource DeviceIcon}"/>
+            <RadioButton
+                Height="50"
+                Style="{StaticResource LeftMenuButtonStyle}"
+                ToolTip="Устройства">
+                <ContentControl Width="24" Content="{StaticResource DeviceIcon}" />
             </RadioButton>
-            <RadioButton Style="{StaticResource LeftMenuButtonStyle}" Height="50" ToolTip="Прочее">
-                <ContentControl Width="24" Content="{StaticResource MoreIcon}"/>
+            <RadioButton
+                Height="50"
+                Style="{StaticResource LeftMenuButtonStyle}"
+                ToolTip="Прочее">
+                <ContentControl Width="24" Content="{StaticResource MoreIcon}" />
             </RadioButton>
         </StackPanel>
     </Grid>
