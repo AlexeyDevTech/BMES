@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BMES.Modules.Header", "BMES
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BMES.Modules.LeftMenu", "BMES.Modules.LeftMenu\BMES.Modules.LeftMenu.csproj", "{4E69AA25-A3F3-4984-A50C-89416D9716E8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BMES.Modules.ProductionViewer", "BMES.Modules.ProductionViewer\BMES.Modules.ProductionViewer.csproj", "{3B605C43-23BC-4ADD-A4FD-248B6DEEE800}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{4E69AA25-A3F3-4984-A50C-89416D9716E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4E69AA25-A3F3-4984-A50C-89416D9716E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4E69AA25-A3F3-4984-A50C-89416D9716E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B605C43-23BC-4ADD-A4FD-248B6DEEE800}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B605C43-23BC-4ADD-A4FD-248B6DEEE800}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B605C43-23BC-4ADD-A4FD-248B6DEEE800}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B605C43-23BC-4ADD-A4FD-248B6DEEE800}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

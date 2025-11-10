@@ -1,0 +1,276 @@
+<UserControl x:Class="BMES.ProductionChainSchemeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="400" d:DesignWidth="1400"
+             Background="#1E1E1E"
+             FontFamily="Segoe UI">
+    <UserControl.Resources>
+        <!-- Стиль для карточки раздела -->
+        <Style TargetType="Border" x:Key="CardStyle">
+            <Setter Property="Background" Value="#2D2D2D"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="BorderBrush" Value="#444"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+        </Style>
+        
+        <!-- Стиль для заголовка карточки -->
+        <Style TargetType="TextBlock" x:Key="TitleStyle">
+            <Setter Property="Foreground" Value="#EAEAEA"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,5,0,10"/>
+        </Style>
+
+        <!-- Стиль для заголовка под-блока -->
+        <Style TargetType="TextBlock" x:Key="SubHeaderStyle">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="13"/>
+        </Style>
+
+        <!-- Стиль для метки (названия поля) -->
+        <Style TargetType="TextBlock" x:Key="LabelStyle">
+            <Setter Property="Foreground" Value="#B0B0B0"/>
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
+        
+        <!-- Стиль для метки в блоке процесса -->
+        <Style TargetType="TextBlock" x:Key="ProcessLabelStyle" BasedOn="{StaticResource LabelStyle}">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Foreground" Value="#D0D0D0"/>
+        </Style>
+
+        <!-- Стиль для значения -->
+        <Style TargetType="TextBlock" x:Key="ValueStyle">
+            <Setter Property="Foreground" Value="#FFFFFF"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
+
+        <!-- Стиль для разделительной линии в карточке -->
+        <Style TargetType="Border" x:Key="HeaderLineStyle">
+            <Setter Property="Background" Value="#00A8E8"/>
+            <Setter Property="Height" Value="4"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="CornerRadius" Value="4,4,0,0"/>
+            <Setter Property="Margin" Value="-1,-1,-1,0"/>
+        </Style>
+
+        <!-- Стиль для контейнера с данными -->
+        <Style TargetType="Border" x:Key="DataBlockStyle">
+            <Setter Property="Background" Value="#3C3C3C"/>
+            <Setter Property="Padding" Value="8,5"/>
+            <Setter Property="CornerRadius" Value="3"/>
+            <Setter Property="Margin" Value="0,0,0,5"/>
+        </Style>
+        
+        <!-- Стиль для стрелки -->
+        <Style TargetType="TextBlock" x:Key="ArrowStyle">
+            <Setter Property="Foreground" Value="#777"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,-3"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <TextBlock Text="Общая схема производственной цепочки" 
+                   Foreground="White" FontSize="18" FontWeight="Bold"
+                   HorizontalAlignment="Left" VerticalAlignment="Top" 
+                   Margin="10,-30,0,0"/>
+
+        <Grid Margin="0,10,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.3*"/>
+                <ColumnDefinition Width="1.5*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="1.5*"/>
+                <ColumnDefinition Width="1.5*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Колонка 1: Сырье с карьера -->
+            <Border Grid.Column="0" Style="{StaticResource CardStyle}">
+                <Grid>
+                    <Border Style="{StaticResource HeaderLineStyle}"/>
+                    <StackPanel>
+                        <TextBlock Text="Сырье с карьера" Style="{StaticResource TitleStyle}" />
+                        <Border Style="{StaticResource DataBlockStyle}" Margin="5,10,5,5">
+                            <TextBlock Text="Напольный склад (ЭКГ-39)" Style="{StaticResource ProcessLabelStyle}"/>
+                        </Border>
+                        <TextBlock Text="↓" Style="{StaticResource ArrowStyle}"/>
+                        <Border Style="{StaticResource DataBlockStyle}" Margin="5">
+                            <TextBlock Text="Перегрузочный склад" Style="{StaticResource ProcessLabelStyle}"/>
+                        </Border>
+                        <TextBlock Text="↓" Style="{StaticResource ArrowStyle}"/>
+                        <Border Style="{StaticResource DataBlockStyle}" Margin="5">
+                            <TextBlock Text="ЦИДТ" Style="{StaticResource ProcessLabelStyle}"/>
+                        </Border>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Колонка 2: Цех дробления -->
+            <Border Grid.Column="1" Style="{StaticResource CardStyle}">
+                <Grid>
+                    <Border Style="{StaticResource HeaderLineStyle}" />
+                    <StackPanel>
+                        <TextBlock Text="Цех дробления" Style="{StaticResource TitleStyle}" />
+                        <Border Style="{StaticResource DataBlockStyle}">
+                            <StackPanel>
+                                <TextBlock Text="Q. КД" Style="{StaticResource SubHeaderStyle}"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Style="{StaticResource LabelStyle}" Text="Факт, т/ч: "/>
+                                    <TextBlock Style="{StaticResource ValueStyle}" Text="2072.50"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Style="{StaticResource LabelStyle}" Text="План, т/ч: "/>
+                                    <TextBlock Style="{StaticResource ValueStyle}" Text="3500.00"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                        <Border Style="{StaticResource DataBlockStyle}">
+                            <StackPanel>
+                                <TextBlock Text="Q. КСМД" Style="{StaticResource SubHeaderStyle}"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Style="{StaticResource LabelStyle}" Text="Факт, т/ч: "/>
+                                    <TextBlock Style="{StaticResource ValueStyle}" Text="479.99"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Style="{StaticResource LabelStyle}" Text="План, т/ч: "/>
+                                    <TextBlock Style="{StaticResource ValueStyle}" Text="452.95"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                        
+                        <Grid Margin="0,15,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Крупное" Style="{StaticResource ProcessLabelStyle}"/>
+                            <TextBlock Grid.Column="1" Text="→" Style="{StaticResource ArrowStyle}" Margin="4,0"/>
+                            <TextBlock Grid.Column="2" Text="Среднее" Style="{StaticResource ProcessLabelStyle}"/>
+                            <TextBlock Grid.Column="3" Text="→" Style="{StaticResource ArrowStyle}" Margin="4,0"/>
+                            <TextBlock Grid.Column="4" Text="Мелкое" Style="{StaticResource ProcessLabelStyle}"/>
+                        </Grid>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Колонка 3: Цех обогащения -->
+            <Border Grid.Column="2" Style="{StaticResource CardStyle}">
+                <Grid>
+                    <Border Style="{StaticResource HeaderLineStyle}" />
+                    <StackPanel>
+                        <TextBlock Text="Цех обогащения" Style="{StaticResource TitleStyle}" />
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Grid.Column="0" Margin="0,0,2,5" Style="{StaticResource DataBlockStyle}">
+                                <StackPanel>
+                                    <TextBlock Text="Q. Ср. произ-ть" Style="{StaticResource SubHeaderStyle}"/>
+                                    <TextBlock Style="{StaticResource LabelStyle}" Text="Факт, т/ч: 578"/>
+                                    <TextBlock Style="{StaticResource LabelStyle}" Text="План, т/ч: 602.5"/>
+                                </StackPanel>
+                            </Border>
+                            <Border Grid.Column="1" Margin="2,0,2,5" Style="{StaticResource DataBlockStyle}">
+                                <StackPanel>
+                                    <TextBlock Text="Q. Ср. мельниц" Style="{StaticResource SubHeaderStyle}"/>
+                                    <TextBlock Style="{StaticResource LabelStyle}" Text="Факт, т/ч: 678 380"/>
+                                    <TextBlock Style="{StaticResource LabelStyle}" Text="План, т/ч: 611 638"/>
+                                </StackPanel>
+                            </Border>
+                             <Border Grid.Column="2" Margin="2,0,0,5" Style="{StaticResource DataBlockStyle}">
+                                <StackPanel>
+                                    <TextBlock Text="Q. Ср. мельниц" Style="{StaticResource SubHeaderStyle}"/>
+                                    <TextBlock Style="{StaticResource LabelStyle}" Text="Факт, т/ч: 605 444"/>
+                                    <TextBlock Style="{StaticResource LabelStyle}" Text="План, т/ч: 627 666"/>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Колонка 4: ФОК -->
+            <Border Grid.Column="3" Style="{StaticResource CardStyle}">
+                <Grid>
+                    <Border Style="{StaticResource HeaderLineStyle}" />
+                    <StackPanel>
+                        <TextBlock Text="ФОК" Style="{StaticResource TitleStyle}" />
+                        <Border Style="{StaticResource DataBlockStyle}">
+                            <StackPanel>
+                                <TextBlock Text="Q. об. маш." Style="{StaticResource SubHeaderStyle}"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Style="{StaticResource LabelStyle}" Text="Факт, т/ч: "/>
+                                    <TextBlock Style="{StaticResource ValueStyle}" Text="678.14"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Style="{StaticResource LabelStyle}" Text="План, т/ч: "/>
+                                    <TextBlock Style="{StaticResource ValueStyle}" Text="991.70"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                        <Grid Margin="0,15,0,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0" Text="Фильтрация" Style="{StaticResource ProcessLabelStyle}"/>
+                            <TextBlock Grid.Row="1" Text="↓" Style="{StaticResource ArrowStyle}"/>
+                            <TextBlock Grid.Row="2" Text="Склад концентрата" Style="{StaticResource ProcessLabelStyle}"/>
+                            <TextBlock Grid.Row="3" Text="↓" Style="{StaticResource ArrowStyle}"/>
+                            <TextBlock Grid.Row="4" Text="Обжиг" Style="{StaticResource ProcessLabelStyle}"/>
+                        </Grid>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Колонка 5: Остаток на складе -->
+            <Border Grid.Column="4" Style="{StaticResource CardStyle}">
+                <Grid>
+                    <Border Style="{StaticResource HeaderLineStyle}" />
+                    <StackPanel>
+                        <TextBlock Text="Остаток на складе" Style="{StaticResource TitleStyle}" />
+                        <Border Style="{StaticResource DataBlockStyle}">
+                            <StackPanel>
+                                <TextBlock Text="Окатыши" Style="{StaticResource SubHeaderStyle}"/>
+                                <TextBlock Style="{StaticResource LabelStyle}" Text="Прочность: 215 кг/окатыш"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Style="{StaticResource DataBlockStyle}">
+                            <StackPanel>
+                                <TextBlock Text="Отгрузка окатышей" Style="{StaticResource SubHeaderStyle}"/>
+                                <TextBlock Style="{StaticResource LabelStyle}" Text="Факт, т/сут: 17 840"/>
+                                <TextBlock Style="{StaticResource LabelStyle}" Text="План, т/сут: 22 080"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Style="{StaticResource DataBlockStyle}">
+                            <StackPanel>
+                                <TextBlock Text="Отгрузка концентрата" Style="{StaticResource SubHeaderStyle}"/>
+                                <TextBlock Style="{StaticResource LabelStyle}" Text="Факт, т/сут: 20 840"/>
+                                <TextBlock Style="{StaticResource LabelStyle}" Text="План, т/сут: 23 180"/>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>
