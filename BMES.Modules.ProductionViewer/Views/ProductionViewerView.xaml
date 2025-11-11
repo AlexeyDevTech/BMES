@@ -89,9 +89,17 @@
             <!--  Колонка 1: Сырье с карьера  -->
             <Border Grid.Column="0" Style="{StaticResource CardStyle}">
                 <Grid>
-                    <Border Style="{StaticResource HeaderLineStyle}" />
-                    <TextBlock Style="{StaticResource TitleStyle}" Text="Сырье с карьера" />
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <Border Style="{StaticResource HeaderLineStyle}" />
+                        <TextBlock Style="{StaticResource TitleStyle}" Text="Предварительная обработка"  TextWrapping="Wrap" TextAlignment="Center"/>
+                    </Grid>
+                    
                     <!--  Содержимое карточки "Сырье"  -->
+                    <Canvas />
                 </Grid>
             </Border>
 
