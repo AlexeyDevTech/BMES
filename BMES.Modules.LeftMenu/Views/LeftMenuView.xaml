@@ -87,6 +87,8 @@
         <StackPanel>
             <RadioButton
                 Height="50"
+                Command="{Binding SelectMenuCommand}"
+                CommandParameter="1"
                 IsChecked="True"
                 Style="{StaticResource LeftMenuButtonStyle}"
                 ToolTip="Главное меню">
@@ -94,24 +96,32 @@
             </RadioButton>
             <RadioButton
                 Height="50"
+                Command="{Binding SelectMenuCommand}"
+                CommandParameter="2"
                 Style="{StaticResource LeftMenuButtonStyle}"
                 ToolTip="Управление">
                 <ContentControl Width="24" Content="{StaticResource ControlIcon}" />
             </RadioButton>
             <RadioButton
                 Height="50"
+                Command="{Binding SelectMenuCommand}"
+                CommandParameter="3"
                 Style="{StaticResource LeftMenuButtonStyle}"
                 ToolTip="Статистика">
                 <ContentControl Width="24" Content="{StaticResource StatsIcon}" />
             </RadioButton>
             <RadioButton
                 Height="50"
+                Command="{Binding SelectMenuCommand}"
+                CommandParameter="4"
                 Style="{StaticResource LeftMenuButtonStyle}"
                 ToolTip="Устройства">
                 <ContentControl Width="24" Content="{StaticResource DeviceIcon}" />
             </RadioButton>
             <RadioButton
                 Height="50"
+                Command="{Binding SelectMenuCommand}"
+                CommandParameter="5"
                 Style="{StaticResource LeftMenuButtonStyle}"
                 ToolTip="Прочее">
                 <ContentControl Width="24" Content="{StaticResource MoreIcon}" />

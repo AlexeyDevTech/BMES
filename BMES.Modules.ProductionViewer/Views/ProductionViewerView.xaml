@@ -6,7 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:prism="http://prismlibrary.com/"
     d:DesignHeight="300"
-    d:DesignWidth="1200"
+    d:DesignWidth="1460"
     prism:ViewModelLocator.AutoWireViewModel="True"
     Background="#1E1E1E"
     FontFamily="Segoe UI"
@@ -66,6 +66,10 @@
             <Setter Property="CornerRadius" Value="3" />
             <Setter Property="Margin" Value="0,0,0,5" />
         </Style>
+        <Style x:Key="ArrowStyle" TargetType="Path">
+            <Setter Property="Stroke" Value="White" />
+            <Setter Property="StrokeThickness" Value="1" />
+        </Style>
     </UserControl.Resources>
     <Grid>
         <TextBlock
@@ -90,16 +94,85 @@
             <Border Grid.Column="0" Style="{StaticResource CardStyle}">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition/>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition />
                     </Grid.RowDefinitions>
                     <Grid Grid.Row="0">
                         <Border Style="{StaticResource HeaderLineStyle}" />
-                        <TextBlock Style="{StaticResource TitleStyle}" Text="Предварительная обработка"  TextWrapping="Wrap" TextAlignment="Center"/>
+                        <TextBlock
+                            Style="{StaticResource TitleStyle}"
+                            Text="Предварительная обработка"
+                            TextAlignment="Center"
+                            TextWrapping="Wrap" />
                     </Grid>
-                    
+
                     <!--  Содержимое карточки "Сырье"  -->
-                    <Canvas />
+                    <Canvas Grid.Row="1">
+                        <Border
+                            Canvas.Left="10"
+                            Canvas.Top="50"
+                            Width="40"
+                            Height="40"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            BorderBrush="White"
+                            BorderThickness="1"
+                            CornerRadius="3,3,3,3" />
+
+                        <!--  Arrow 1  -->
+                        <Path
+                            Canvas.Left="50.656"
+                            Canvas.Top="64.5"
+                            Width="41"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Data="M 0,10 L 30,10 M 25,5 L 30,10 L 25,15"
+                            Stretch="Fill"
+                            Style="{StaticResource ArrowStyle}" />
+
+                        <Border
+                            Canvas.Left="92"
+                            Canvas.Top="50"
+                            Width="40"
+                            Height="40"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            BorderBrush="White"
+                            BorderThickness="1"
+                            CornerRadius="3,3,3,3" />
+
+                        <!--  Arrow 2  -->
+                        <Path
+                            Canvas.Left="132.469"
+                            Canvas.Top="64.5"
+                            Width="48"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Data="M 0,10 L 30,10 M 25,5 L 30,10 L 25,15"
+                            Stretch="Fill"
+                            Style="{StaticResource ArrowStyle}" RenderTransformOrigin="0.5,0.5" >
+                            <Path.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform ScaleX="1"/>
+                                    <SkewTransform/>
+                                    <RotateTransform/>
+                                    <TranslateTransform/>
+                                </TransformGroup>
+                            </Path.RenderTransform>
+                        </Path>
+
+                        <Border
+                            Canvas.Left="181"
+                            Canvas.Top="50"
+                            Width="40"
+                            Height="40"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            BorderBrush="White"
+                            BorderThickness="1"
+                            CornerRadius="3,3,3,3" />
+
+                    </Canvas>
                 </Grid>
             </Border>
 

@@ -11,6 +11,7 @@
     <ProjectReference Include="..\BMES.Core\BMES.Core.csproj" />
     <ProjectReference Include="..\BMES.Modules.Header\BMES.Modules.Header.csproj" />
     <ProjectReference Include="..\BMES.Modules.LeftMenu\BMES.Modules.LeftMenu.csproj" />
+    <ProjectReference Include="..\BMES.Modules.ProductionViewer\BMES.Modules.ProductionViewer.csproj" />
     <ProjectReference Include="..\BMES.Regions\BMES.Regions.csproj" />
   </ItemGroup>
 </Project>

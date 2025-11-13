@@ -3,6 +3,7 @@ using BMES.Core;
 using BMES.Core.Interfaces;
 using BMES.Modules.Header;
 using BMES.Modules.LeftMenu;
+using BMES.Modules.ProductionViewer;
 using BMES.Views;
 using Prism.Ioc;
 using Prism.Modularity;
@@ -28,6 +29,7 @@ namespace BMES
             base.ConfigureModuleCatalog(moduleCatalog);
             moduleCatalog.AddModule<HeaderModule>();
             moduleCatalog.AddModule<LeftMenuModule>();
+            moduleCatalog.AddModule<ProductionViewerModule>();
         }
     }
 }
