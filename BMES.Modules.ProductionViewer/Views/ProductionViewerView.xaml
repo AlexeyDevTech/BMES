@@ -1,4 +1,4 @@
-﻿<UserControl
+<UserControl
     x:Class="BMES.Modules.ProductionViewer.Views.ProductionViewerView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -83,14 +83,14 @@
 
         <Grid Margin="0,10,0,0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1.2*" />
-                <ColumnDefinition Width="1.5*" />
-                <ColumnDefinition Width="2*" />
-                <ColumnDefinition Width="1.2*" />
-                <ColumnDefinition Width="1.5*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <!--  Колонка 1: Сырье с карьера  -->
+            <!--  Колонка 1: Подготовка поддона  -->
             <Border Grid.Column="0" Style="{StaticResource CardStyle}">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -101,184 +101,149 @@
                         <Border Style="{StaticResource HeaderLineStyle}" />
                         <TextBlock
                             Style="{StaticResource TitleStyle}"
-                            Text="Предварительная обработка"
+                            Text="Подготовка поддона"
                             TextAlignment="Center"
                             TextWrapping="Wrap" />
                     </Grid>
 
-                    <!--  Содержимое карточки "Сырье"  -->
                     <Canvas Grid.Row="1">
-                        <Border
-                            Canvas.Left="10"
-                            Canvas.Top="50"
-                            Width="40"
-                            Height="40"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            BorderBrush="White"
-                            BorderThickness="1"
-                            CornerRadius="3,3,3,3" />
+                        <!-- Cleaning -->
+                        <Border Canvas.Left="90" Canvas.Top="12" Width="100" Height="40" BorderBrush="White" BorderThickness="1" CornerRadius="3">
+                            <TextBlock Text="Очистка" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <Path Canvas.Left="140" Canvas.Top="51.72" Data="M0,0 L0,20 L-5,15 M0,20 L5,15" Style="{StaticResource ArrowStyle}"/>
 
-                        <!--  Arrow 1  -->
-                        <Path
-                            Canvas.Left="50.656"
-                            Canvas.Top="64.5"
-                            Width="41"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Data="M 0,10 L 30,10 M 25,5 L 30,10 L 25,15"
-                            Stretch="Fill"
-                            Style="{StaticResource ArrowStyle}" />
+                        <!-- Shuttering -->
+                        <Border Canvas.Left="90" Canvas.Top="72" Width="100" Height="40" BorderBrush="White" BorderThickness="1" CornerRadius="3">
+                            <TextBlock Text="Опалубка" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <Path Canvas.Left="140" Canvas.Top="111.72" Data="M0,0 L0,20 L-5,15 M0,20 L5,15" Style="{StaticResource ArrowStyle}"/>
 
-                        <Border
-                            Canvas.Left="92"
-                            Canvas.Top="50"
-                            Width="40"
-                            Height="40"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            BorderBrush="White"
-                            BorderThickness="1"
-                            CornerRadius="3,3,3,3" />
+                        <!-- Engineering Niches -->
+                        <Border Canvas.Left="90" Canvas.Top="132" Width="100" Height="40" BorderBrush="White" BorderThickness="1" CornerRadius="3">
+                            <TextBlock Text="Инж. ниши" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <Path Canvas.Left="140" Canvas.Top="171.72" Data="M0,0 L0,20 L-5,15 M0,20 L5,15" Style="{StaticResource ArrowStyle}"/>
 
-                        <!--  Arrow 2  -->
-                        <Path
-                            Canvas.Left="132.469"
-                            Canvas.Top="64.5"
-                            Width="48"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Data="M 0,10 L 30,10 M 25,5 L 30,10 L 25,15"
-                            Stretch="Fill"
-                            Style="{StaticResource ArrowStyle}" RenderTransformOrigin="0.5,0.5" >
-                            <Path.RenderTransform>
-                                <TransformGroup>
-                                    <ScaleTransform ScaleX="1"/>
-                                    <SkewTransform/>
-                                    <RotateTransform/>
-                                    <TranslateTransform/>
-                                </TransformGroup>
-                            </Path.RenderTransform>
-                        </Path>
-
-                        <Border
-                            Canvas.Left="181"
-                            Canvas.Top="50"
-                            Width="40"
-                            Height="40"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Center"
-                            BorderBrush="White"
-                            BorderThickness="1"
-                            CornerRadius="3,3,3,3" />
-
+                        <!-- Preparation -->
+                        <Border Canvas.Left="90" Canvas.Top="192" Width="100" Height="40" BorderBrush="White" BorderThickness="1" CornerRadius="3">
+                            <TextBlock Text="Подготовка" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
                     </Canvas>
                 </Grid>
             </Border>
 
-            <!--  Колонка 2: Цех дробления  -->
+            <!--  Колонка 2: Армирование и бетонирование  -->
             <Border Grid.Column="1" Style="{StaticResource CardStyle}">
                 <Grid>
-                    <Border Style="{StaticResource HeaderLineStyle}" />
-                    <StackPanel>
-                        <TextBlock Style="{StaticResource TitleStyle}" Text="Цех дробления" />
-                        <Border Style="{StaticResource DataBlockStyle}">
-                            <StackPanel>
-                                <TextBlock Style="{StaticResource SubHeaderStyle}" Text="Q. КД" />
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Style="{StaticResource LabelStyle}" Text="Факт, т/ч: " />
-                                    <TextBlock Style="{StaticResource ValueStyle}" Text="2072.50" />
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Style="{StaticResource LabelStyle}" Text="План, т/ч: " />
-                                    <TextBlock Style="{StaticResource ValueStyle}" Text="3500.00" />
-                                </StackPanel>
-                            </StackPanel>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <Border Style="{StaticResource HeaderLineStyle}" />
+                        <TextBlock
+                            Style="{StaticResource TitleStyle}"
+                            Text="Армирование и бетонирование"
+                            TextAlignment="Center"
+                            TextWrapping="Wrap" />
+                    </Grid>
+                    <Canvas Grid.Row="1">
+                        <!-- Arranging Steel Cables -->
+                        <Border Canvas.Left="80" Canvas.Top="12" Width="120" Height="40" BorderBrush="White" BorderThickness="1" CornerRadius="3">
+                            <TextBlock Text="Укладка тросов" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"/>
                         </Border>
-                        <Border Style="{StaticResource DataBlockStyle}">
-                            <StackPanel>
-                                <TextBlock Style="{StaticResource SubHeaderStyle}" Text="Q. КСМД" />
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Style="{StaticResource LabelStyle}" Text="Факт, т/ч: " />
-                                    <TextBlock Style="{StaticResource ValueStyle}" Text="479.99" />
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Style="{StaticResource LabelStyle}" Text="План, т/ч: " />
-                                    <TextBlock Style="{StaticResource ValueStyle}" Text="452.95" />
-                                </StackPanel>
-                            </StackPanel>
+                        <Path Canvas.Left="140" Canvas.Top="51.72" Data="M0,0 L0,20 L-5,15 M0,20 L5,15" Style="{StaticResource ArrowStyle}"/>
+
+                        <!-- Frame Installation -->
+                        <Border Canvas.Left="80" Canvas.Top="72" Width="120" Height="40" BorderBrush="White" BorderThickness="1" CornerRadius="3">
+                            <TextBlock Text="Установка каркаса" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"/>
                         </Border>
-                    </StackPanel>
+                        <Path Canvas.Left="140" Canvas.Top="111.72" Data="M0,0 L0,20 L-5,15 M0,20 L5,15" Style="{StaticResource ArrowStyle}"/>
+
+                        <!-- Isolator Post -->
+                        <Border Canvas.Left="80" Canvas.Top="132" Width="120" Height="40" BorderBrush="White" BorderThickness="1" CornerRadius="3">
+                            <TextBlock Text="Изоляторный пост" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"/>
+                        </Border>
+                        <Path Canvas.Left="140" Canvas.Top="171.72" Data="M0,0 L0,20 L-5,15 M0,20 L5,15" Style="{StaticResource ArrowStyle}"/>
+
+                        <!-- Concreting -->
+                        <Border Canvas.Left="80" Canvas.Top="192" Width="120" Height="40" BorderBrush="White" BorderThickness="1" CornerRadius="3">
+                            <TextBlock Text="Бетонирование" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </Canvas>
                 </Grid>
             </Border>
 
-            <!--  Колонка 3: Цех обогащения  -->
+            <!--  Колонка 3: Отверждение и отделка  -->
             <Border Grid.Column="2" Style="{StaticResource CardStyle}">
                 <Grid>
-                    <Border Style="{StaticResource HeaderLineStyle}" />
-                    <StackPanel>
-                        <TextBlock Style="{StaticResource TitleStyle}" Text="Цех обогащения" />
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <Border
-                                Grid.Column="0"
-                                Margin="0,0,2,5"
-                                Style="{StaticResource DataBlockStyle}">
-                                <StackPanel>
-                                    <TextBlock Style="{StaticResource SubHeaderStyle}" Text="Q. Ср. произ-ть" />
-                                    <TextBlock Style="{StaticResource LabelStyle}" Text="Факт, т/ч: 578" />
-                                    <TextBlock Style="{StaticResource LabelStyle}" Text="План, т/ч: 602.5" />
-                                </StackPanel>
-                            </Border>
-                            <Border
-                                Grid.Column="1"
-                                Margin="2,0,2,5"
-                                Style="{StaticResource DataBlockStyle}">
-                                <StackPanel>
-                                    <TextBlock Style="{StaticResource SubHeaderStyle}" Text="Q. Ср. мельниц" />
-                                    <TextBlock Style="{StaticResource LabelStyle}" Text="Факт, т/ч: 678 380" />
-                                    <TextBlock Style="{StaticResource LabelStyle}" Text="План, т/ч: 611 638" />
-                                </StackPanel>
-                            </Border>
-                            <Border
-                                Grid.Column="2"
-                                Margin="2,0,0,5"
-                                Style="{StaticResource DataBlockStyle}">
-                                <StackPanel>
-                                    <TextBlock Style="{StaticResource SubHeaderStyle}" Text="Q. Ср. мельниц" />
-                                    <TextBlock Style="{StaticResource LabelStyle}" Text="Факт, т/ч: 605 444" />
-                                    <TextBlock Style="{StaticResource LabelStyle}" Text="План, т/ч: 627 666" />
-                                </StackPanel>
-                            </Border>
-                        </Grid>
-                    </StackPanel>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <Border Style="{StaticResource HeaderLineStyle}" />
+                        <TextBlock
+                            Style="{StaticResource TitleStyle}"
+                            Text="Отверждение и отделка"
+                            TextAlignment="Center"
+                            TextWrapping="Wrap" />
+                    </Grid>
+                    <Canvas Grid.Row="1">
+                        <!-- Heat and Humidity Treatment (Initial) -->
+                        <Border Canvas.Left="70" Canvas.Top="10" Width="140" Height="40" BorderBrush="White" BorderThickness="1" CornerRadius="3" HorizontalAlignment="Left" VerticalAlignment="Center">
+                            <TextBlock Text="Термообработка (нач.)" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"/>
+                        </Border>
+                        <Path Canvas.Left="140" Canvas.Top="50" Data="M0,0 L0,20 L-5,15 M0,20 L5,15" Style="{StaticResource ArrowStyle}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+
+                        <!-- Smoothing Station (Finishing) -->
+                        <Border Canvas.Left="70" Canvas.Top="70" Width="140" Height="40" BorderBrush="White" BorderThickness="1" CornerRadius="3" HorizontalAlignment="Left" VerticalAlignment="Center">
+                            <TextBlock Text="Сглаживание" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <Path Canvas.Left="140" Canvas.Top="110" Data="M0,0 L0,20 L-5,15 M0,20 L5,15" Style="{StaticResource ArrowStyle}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+
+                        <!-- Heat and Humidity Treatment (Final) -->
+                        <Border Canvas.Left="70" Canvas.Top="130" Width="140" Height="40" BorderBrush="White" BorderThickness="1" CornerRadius="3" HorizontalAlignment="Left" VerticalAlignment="Center">
+                            <TextBlock Text="Термообработка (финал)" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"/>
+                        </Border>
+                    </Canvas>
                 </Grid>
             </Border>
 
-            <!--  Колонка 4: ФОК  -->
+            <!--  Колонка 4: Распалубка и готовый продукт  -->
             <Border Grid.Column="3" Style="{StaticResource CardStyle}">
                 <Grid>
-                    <Border Style="{StaticResource HeaderLineStyle}" />
-                    <StackPanel>
-                        <TextBlock Style="{StaticResource TitleStyle}" Text="ФОК" />
-                        <Border Style="{StaticResource DataBlockStyle}">
-                            <StackPanel>
-                                <TextBlock Style="{StaticResource SubHeaderStyle}" Text="Q. об. маш." />
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Style="{StaticResource LabelStyle}" Text="Факт, т/ч: " />
-                                    <TextBlock Style="{StaticResource ValueStyle}" Text="678.14" />
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Style="{StaticResource LabelStyle}" Text="План, т/ч: " />
-                                    <TextBlock Style="{StaticResource ValueStyle}" Text="991.70" />
-                                </StackPanel>
-                            </StackPanel>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <Border Style="{StaticResource HeaderLineStyle}" />
+                        <TextBlock
+                            Style="{StaticResource TitleStyle}"
+                            Text="Распалубка и готовый продукт"
+                            TextAlignment="Center"
+                            TextWrapping="Wrap" />
+                    </Grid>
+                    <Canvas Grid.Row="1">
+                        <!-- De-shuttering -->
+                        <Border Canvas.Left="80" Canvas.Top="10" Width="120" Height="40" BorderBrush="White" BorderThickness="1" CornerRadius="3" HorizontalAlignment="Left" VerticalAlignment="Center">
+                            <TextBlock Text="Распалубка" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
-                    </StackPanel>
+                        <Path Canvas.Left="140" Canvas.Top="50" Data="M0,0 L0,20 L-5,15 M0,20 L5,15" Style="{StaticResource ArrowStyle}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+
+                        <!-- De-tensioning Steel Cables -->
+                        <Border Canvas.Left="80" Canvas.Top="70" Width="120" Height="40" BorderBrush="White" BorderThickness="1" CornerRadius="3" HorizontalAlignment="Left" VerticalAlignment="Center">
+                            <TextBlock Text="Снятие натяжения" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"/>
+                        </Border>
+                        <Path Canvas.Left="140" Canvas.Top="110" Data="M0,0 L0,20 L-5,15 M0,20 L5,15" Style="{StaticResource ArrowStyle}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+
+                        <!-- Removal of the Finished Product -->
+                        <Border Canvas.Left="80" Canvas.Top="130" Width="120" Height="40" BorderBrush="White" BorderThickness="1" CornerRadius="3" HorizontalAlignment="Left" VerticalAlignment="Center">
+                            <TextBlock Text="Извлечение продукта" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"/>
+                        </Border>
+                    </Canvas>
                 </Grid>
             </Border>
 
