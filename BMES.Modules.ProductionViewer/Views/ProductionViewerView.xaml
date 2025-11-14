@@ -67,8 +67,28 @@
             <Setter Property="Margin" Value="0,0,0,5" />
         </Style>
         <Style x:Key="ArrowStyle" TargetType="Path">
-            <Setter Property="Stroke" Value="White" />
-            <Setter Property="StrokeThickness" Value="1" />
+            <Setter Property="Stroke" Value="#757575" />
+            <Setter Property="StrokeThickness" Value="1.5" />
+        </Style>
+        <Style x:Key="ProcessStepStyle" TargetType="Border">
+            <Setter Property="Background" Value="#3C3C3C" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="CornerRadius" Value="4" />
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect ShadowDepth="1" Color="Black" Opacity="0.4" BlurRadius="4"/>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Effect">
+                        <Setter.Value>
+                            <DropShadowEffect ShadowDepth="4" Color="Black" Opacity="0.6" BlurRadius="10"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
         </Style>
     </UserControl.Resources>
     <Grid>
@@ -108,25 +128,25 @@
 
                     <Canvas Grid.Row="1">
                         <!-- Cleaning -->
-                        <Border Canvas.Left="90" Canvas.Top="12" Width="100" Height="40" BorderBrush="White" BorderThickness="1" CornerRadius="3">
+                        <Border Canvas.Left="80" Canvas.Top="10" Width="120" Height="50" Style="{StaticResource ProcessStepStyle}">
                             <TextBlock Text="Очистка" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
-                        <Path Canvas.Left="140" Canvas.Top="51.72" Data="M0,0 L0,20 L-5,15 M0,20 L5,15" Style="{StaticResource ArrowStyle}"/>
-
+                        <Path Canvas.Left="140" Canvas.Top="60" Data="M0,0 L0,20 L-5,15 M0,20 L5,15" Style="{StaticResource ArrowStyle}"/>
+                        
                         <!-- Shuttering -->
-                        <Border Canvas.Left="90" Canvas.Top="72" Width="100" Height="40" BorderBrush="White" BorderThickness="1" CornerRadius="3">
+                        <Border Canvas.Left="80" Canvas.Top="80" Width="120" Height="50" Style="{StaticResource ProcessStepStyle}">
                             <TextBlock Text="Опалубка" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
-                        <Path Canvas.Left="140" Canvas.Top="111.72" Data="M0,0 L0,20 L-5,15 M0,20 L5,15" Style="{StaticResource ArrowStyle}"/>
+                        <Path Canvas.Left="140" Canvas.Top="130" Data="M0,0 L0,20 L-5,15 M0,20 L5,15" Style="{StaticResource ArrowStyle}"/>
 
                         <!-- Engineering Niches -->
-                        <Border Canvas.Left="90" Canvas.Top="132" Width="100" Height="40" BorderBrush="White" BorderThickness="1" CornerRadius="3">
+                        <Border Canvas.Left="80" Canvas.Top="150" Width="120" Height="50" Style="{StaticResource ProcessStepStyle}">
                             <TextBlock Text="Инж. ниши" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
-                        <Path Canvas.Left="140" Canvas.Top="171.72" Data="M0,0 L0,20 L-5,15 M0,20 L5,15" Style="{StaticResource ArrowStyle}"/>
+                        <Path Canvas.Left="140" Canvas.Top="200" Data="M0,0 L0,20 L-5,15 M0,20 L5,15" Style="{StaticResource ArrowStyle}"/>
 
                         <!-- Preparation -->
-                        <Border Canvas.Left="90" Canvas.Top="192" Width="100" Height="40" BorderBrush="White" BorderThickness="1" CornerRadius="3">
+                        <Border Canvas.Left="80" Canvas.Top="220" Width="120" Height="50" Style="{StaticResource ProcessStepStyle}">
                             <TextBlock Text="Подготовка" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                     </Canvas>
@@ -150,25 +170,25 @@
                     </Grid>
                     <Canvas Grid.Row="1">
                         <!-- Arranging Steel Cables -->
-                        <Border Canvas.Left="80" Canvas.Top="12" Width="120" Height="40" BorderBrush="White" BorderThickness="1" CornerRadius="3">
+                        <Border Canvas.Left="70" Canvas.Top="10" Width="140" Height="50" Style="{StaticResource ProcessStepStyle}">
                             <TextBlock Text="Укладка тросов" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"/>
                         </Border>
-                        <Path Canvas.Left="140" Canvas.Top="51.72" Data="M0,0 L0,20 L-5,15 M0,20 L5,15" Style="{StaticResource ArrowStyle}"/>
+                        <Path Canvas.Left="140" Canvas.Top="60" Data="M0,0 L0,20 L-5,15 M0,20 L5,15" Style="{StaticResource ArrowStyle}"/>
 
                         <!-- Frame Installation -->
-                        <Border Canvas.Left="80" Canvas.Top="72" Width="120" Height="40" BorderBrush="White" BorderThickness="1" CornerRadius="3">
+                        <Border Canvas.Left="70" Canvas.Top="80" Width="140" Height="50" Style="{StaticResource ProcessStepStyle}">
                             <TextBlock Text="Установка каркаса" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"/>
                         </Border>
-                        <Path Canvas.Left="140" Canvas.Top="111.72" Data="M0,0 L0,20 L-5,15 M0,20 L5,15" Style="{StaticResource ArrowStyle}"/>
+                        <Path Canvas.Left="140" Canvas.Top="130" Data="M0,0 L0,20 L-5,15 M0,20 L5,15" Style="{StaticResource ArrowStyle}"/>
 
                         <!-- Isolator Post -->
-                        <Border Canvas.Left="80" Canvas.Top="132" Width="120" Height="40" BorderBrush="White" BorderThickness="1" CornerRadius="3">
+                        <Border Canvas.Left="70" Canvas.Top="150" Width="140" Height="50" Style="{StaticResource ProcessStepStyle}">
                             <TextBlock Text="Изоляторный пост" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"/>
                         </Border>
-                        <Path Canvas.Left="140" Canvas.Top="171.72" Data="M0,0 L0,20 L-5,15 M0,20 L5,15" Style="{StaticResource ArrowStyle}"/>
+                        <Path Canvas.Left="140" Canvas.Top="200" Data="M0,0 L0,20 L-5,15 M0,20 L5,15" Style="{StaticResource ArrowStyle}"/>
 
                         <!-- Concreting -->
-                        <Border Canvas.Left="80" Canvas.Top="192" Width="120" Height="40" BorderBrush="White" BorderThickness="1" CornerRadius="3">
+                        <Border Canvas.Left="70" Canvas.Top="220" Width="140" Height="50" Style="{StaticResource ProcessStepStyle}">
                             <TextBlock Text="Бетонирование" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                     </Canvas>
@@ -192,19 +212,19 @@
                     </Grid>
                     <Canvas Grid.Row="1">
                         <!-- Heat and Humidity Treatment (Initial) -->
-                        <Border Canvas.Left="70" Canvas.Top="10" Width="140" Height="40" BorderBrush="White" BorderThickness="1" CornerRadius="3" HorizontalAlignment="Left" VerticalAlignment="Center">
+                        <Border Canvas.Left="70" Canvas.Top="10" Width="160" Height="50" Style="{StaticResource ProcessStepStyle}" HorizontalAlignment="Left" VerticalAlignment="Center">
                             <TextBlock Text="Термообработка (нач.)" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"/>
                         </Border>
-                        <Path Canvas.Left="140" Canvas.Top="50" Data="M0,0 L0,20 L-5,15 M0,20 L5,15" Style="{StaticResource ArrowStyle}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        <Path Canvas.Left="150" Canvas.Top="60" Data="M0,0 L0,20 L-5,15 M0,20 L5,15" Style="{StaticResource ArrowStyle}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
 
                         <!-- Smoothing Station (Finishing) -->
-                        <Border Canvas.Left="70" Canvas.Top="70" Width="140" Height="40" BorderBrush="White" BorderThickness="1" CornerRadius="3" HorizontalAlignment="Left" VerticalAlignment="Center">
+                        <Border Canvas.Left="70" Canvas.Top="80" Width="160" Height="50" Style="{StaticResource ProcessStepStyle}" HorizontalAlignment="Left" VerticalAlignment="Center">
                             <TextBlock Text="Сглаживание" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
-                        <Path Canvas.Left="140" Canvas.Top="110" Data="M0,0 L0,20 L-5,15 M0,20 L5,15" Style="{StaticResource ArrowStyle}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        <Path Canvas.Left="150" Canvas.Top="130" Data="M0,0 L0,20 L-5,15 M0,20 L5,15" Style="{StaticResource ArrowStyle}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
 
                         <!-- Heat and Humidity Treatment (Final) -->
-                        <Border Canvas.Left="70" Canvas.Top="130" Width="140" Height="40" BorderBrush="White" BorderThickness="1" CornerRadius="3" HorizontalAlignment="Left" VerticalAlignment="Center">
+                        <Border Canvas.Left="70" Canvas.Top="150" Width="160" Height="50" Style="{StaticResource ProcessStepStyle}" HorizontalAlignment="Left" VerticalAlignment="Center">
                             <TextBlock Text="Термообработка (финал)" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"/>
                         </Border>
                     </Canvas>
@@ -228,19 +248,19 @@
                     </Grid>
                     <Canvas Grid.Row="1">
                         <!-- De-shuttering -->
-                        <Border Canvas.Left="80" Canvas.Top="10" Width="120" Height="40" BorderBrush="White" BorderThickness="1" CornerRadius="3" HorizontalAlignment="Left" VerticalAlignment="Center">
+                        <Border Canvas.Left="70" Canvas.Top="10" Width="140" Height="50" Style="{StaticResource ProcessStepStyle}" HorizontalAlignment="Left" VerticalAlignment="Center">
                             <TextBlock Text="Распалубка" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
-                        <Path Canvas.Left="140" Canvas.Top="50" Data="M0,0 L0,20 L-5,15 M0,20 L5,15" Style="{StaticResource ArrowStyle}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        <Path Canvas.Left="140" Canvas.Top="60" Data="M0,0 L0,20 L-5,15 M0,20 L5,15" Style="{StaticResource ArrowStyle}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
 
                         <!-- De-tensioning Steel Cables -->
-                        <Border Canvas.Left="80" Canvas.Top="70" Width="120" Height="40" BorderBrush="White" BorderThickness="1" CornerRadius="3" HorizontalAlignment="Left" VerticalAlignment="Center">
+                        <Border Canvas.Left="70" Canvas.Top="80" Width="140" Height="50" Style="{StaticResource ProcessStepStyle}" HorizontalAlignment="Left" VerticalAlignment="Center">
                             <TextBlock Text="Снятие натяжения" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"/>
                         </Border>
-                        <Path Canvas.Left="140" Canvas.Top="110" Data="M0,0 L0,20 L-5,15 M0,20 L5,15" Style="{StaticResource ArrowStyle}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        <Path Canvas.Left="140" Canvas.Top="130" Data="M0,0 L0,20 L-5,15 M0,20 L5,15" Style="{StaticResource ArrowStyle}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
 
                         <!-- Removal of the Finished Product -->
-                        <Border Canvas.Left="80" Canvas.Top="130" Width="120" Height="40" BorderBrush="White" BorderThickness="1" CornerRadius="3" HorizontalAlignment="Left" VerticalAlignment="Center">
+                        <Border Canvas.Left="70" Canvas.Top="150" Width="140" Height="50" Style="{StaticResource ProcessStepStyle}" HorizontalAlignment="Left" VerticalAlignment="Center">
                             <TextBlock Text="Извлечение продукта" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"/>
                         </Border>
                     </Canvas>
