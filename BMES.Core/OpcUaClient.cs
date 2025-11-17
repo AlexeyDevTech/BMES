@@ -2,27 +2,26 @@
 using Microsoft.Extensions.Logging;
 using Workstation.ServiceModel.Ua;
 using Workstation.ServiceModel.Ua.Channels;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace BMES.Core
 {
-    /// <summary>
-    /// Provides a client for communicating with OPC UA servers.
-    /// Supports connecting, disconnecting, reading, and writing data.
-    /// </summary>
     public class OpcUaClient : IOpcUaClient, IAsyncDisposable
     {
         private readonly string _serverUrl;
         private readonly IUserIdentity _userIdentity;
         private readonly string _securityPolicyUri;
         private readonly ILogger<OpcUaClient> _logger;
-        private ClientSessionChannel _channel;
+        private ClientSessionChannel? _channel;
         private readonly SemaphoreSlim _channelLock = new SemaphoreSlim(1, 1);
 
         public OpcUaClient(
             string serverUrl,
-            IUserIdentity userIdentity = null,
-            string securityPolicyUri = SecurityPolicyUris.Basic256Sha256,
-            ILogger<OpcUaClient> logger = null)
+            IUserIdentity? userIdentity = null,
+            string securityPolicyUri = SecurityPolicyUris.None,
+            ILogger<OpcUaClient>? logger = null)
         {
             _serverUrl = serverUrl ?? throw new ArgumentNullException(nameof(serverUrl));
             _userIdentity = userIdentity ?? new AnonymousIdentity();
@@ -33,7 +32,7 @@ namespace BMES.Core
 
         public bool IsConnected => _channel != null && _channel.State == CommunicationState.Opened;
 
-        public async Task ConnectAsync(CancellationToken cancellationToken = default)
+        private async Task ConnectAsync(CancellationToken cancellationToken = default)
         {
             await _channelLock.WaitAsync(cancellationToken);
             try
@@ -52,6 +51,7 @@ namespace BMES.Core
                 };
 
                 _channel = new ClientSessionChannel(clientDescription, null, _userIdentity, _serverUrl, _securityPolicyUri);
+                
                 await _channel.OpenAsync(cancellationToken);
                 _logger?.LogInformation("Connected to OPC UA server at {ServerUrl}.", _serverUrl);
             }
@@ -103,7 +103,7 @@ namespace BMES.Core
                     }
                 };
 
-                var response = await _channel.ReadAsync(request, cancellationToken);
+                var response = await (_channel?.ReadAsync(request, cancellationToken) ?? Task.FromResult(new ReadResponse()));
                 var result = response.Results[0];
 
                 if (StatusCode.IsBad(result.StatusCode))
@@ -134,7 +134,7 @@ namespace BMES.Core
                     }
                 };
 
-                var response = await _channel.WriteAsync(request, cancellationToken);
+                var response = await (_channel?.WriteAsync(request, cancellationToken) ?? Task.FromResult(new WriteResponse()));
                 var result = response.Results[0];
 
                 if (result != StatusCodes.Good)
@@ -165,6 +165,6 @@ namespace BMES.Core
 
     public class OpcUaException : Exception
     {
-        public OpcUaException(string message, Exception innerException = null) : base(message, innerException) { }
+        public OpcUaException(string message, Exception? innerException = null) : base(message, innerException) { }
     }
 }

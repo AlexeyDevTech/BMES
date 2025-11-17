@@ -1,9 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows7.0</TargetFramework>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Prism.Wpf" Version="8.1.97" />
+    <PackageReference Include="Unity" Version="5.11.10" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BMES.Core\BMES.Core.csproj" />
   </ItemGroup>
 </Project>

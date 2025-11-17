@@ -1,4 +1,6 @@
-﻿using System.Windows.Controls;
+﻿using BMES.Modules.ProductionViewer.ViewModels;
+using System.Windows.Controls;
+using Unity;
 
 namespace BMES.Modules.ProductionViewer.Views
 {
@@ -7,9 +9,10 @@ namespace BMES.Modules.ProductionViewer.Views
     /// </summary>
     public partial class ProductionViewerView : UserControl
     {
-        public ProductionViewerView()
+        public ProductionViewerView(IUnityContainer container)
         {
             InitializeComponent();
+            DataContext = container.Resolve<ProductionViewerViewModel>();
         }
     }
 }

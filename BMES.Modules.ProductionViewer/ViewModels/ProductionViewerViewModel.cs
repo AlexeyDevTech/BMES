@@ -1,53 +1,77 @@
-﻿using Prism.Commands;
+﻿using BMES.Core.Interfaces;
 using Prism.Mvvm;
 using Prism.Regions;
 using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.ComponentModel;
 
 namespace BMES.Modules.ProductionViewer.ViewModels
 {
-    public class ProductionViewerViewModel : BindableBase, INavigationAware
+    public class ProductionViewerViewModel : BindableBase, INavigationAware, IDisposable
     {
-        private double _outdoorTemperature = -1.2;
-        private double _indoorTemperature = 21.1;
-        private int _tvoHumidity = 34;
+        private readonly IOpcUaService _opcUaService;
 
-        public double OutdoorTemperature
+        private float _outdoorTemperature;
+        private float _indoorTemperature;
+        private float _tvoHumidity;
+
+        public float OutdoorTemperature
         {
             get => _outdoorTemperature;
             set { SetProperty(ref _outdoorTemperature, value); }
         }
 
-        public double IndoorTemperature
+        public float IndoorTemperature
         {
             get => _indoorTemperature;
             set { SetProperty(ref _indoorTemperature, value); }
         }
 
-        public int TvoHumidity
+        public float TvoHumidity
         {
             get => _tvoHumidity;
             set { SetProperty(ref _tvoHumidity, value); }
         }
 
-        public ProductionViewerViewModel()
+        public ProductionViewerViewModel(IOpcUaService opcUaService)
         {
+            _opcUaService = opcUaService;
+            _opcUaService.PropertyChanged += OnOpcUaServicePropertyChanged;
 
+            // Initialize with current values
+            IndoorTemperature = _opcUaService.MidTemp;
+            OutdoorTemperature = _opcUaService.TempOut;
+            TvoHumidity = _opcUaService.Hudimity;
+        }
+
+        private void OnOpcUaServicePropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case nameof(IOpcUaService.MidTemp):
+                    IndoorTemperature = _opcUaService.MidTemp;
+                    break;
+                case nameof(IOpcUaService.TempOut):
+                    OutdoorTemperature = _opcUaService.TempOut;
+                    break;
+                case nameof(IOpcUaService.Hudimity):
+                    TvoHumidity = _opcUaService.Hudimity;
+                    break;
+            }
         }
 
         public bool IsNavigationTarget(NavigationContext navigationContext) => true;
 
-        //из...
         public void OnNavigatedFrom(NavigationContext navigationContext)
         {
-            
         }
-        
-         //в...
+
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
-            
+        }
+
+        public void Dispose()
+        {
+            _opcUaService.PropertyChanged -= OnOpcUaServicePropertyChanged;
         }
     }
 }
