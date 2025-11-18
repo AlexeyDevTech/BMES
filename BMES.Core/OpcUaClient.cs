@@ -353,17 +353,6 @@ namespace BMES.Core
             return observable;
         }
 
-        // ---- Добавлена синхронная обёртка, чтобы соответствовать старым интерфейсам, ожидающим Subscribe(string) ----
-        // Это помогает исправить CS0535, если интерфейс требует синхронный Subscribe.
-        // Предупреждение: обёртка блокирует текущий поток до завершения создания подписки.
-        public IObservable<DataValue> Subscribe(string nodeId)
-        {
-            // Явно вызываем асинхронную реализацию и дожидаемся результата.
-            // В большинстве серверных сценариев это безопасно; если у вас GUI/сценарии с синхронизацией,
-            // рассмотрите возможность обновления интерфейса на асинхронную версию.
-            return SubscribeAsync(nodeId).GetAwaiter().GetResult();
-        }
-
         private async Task EnsureConnectedAsync(CancellationToken cancellationToken = default)
         {
             if (!IsConnected)
