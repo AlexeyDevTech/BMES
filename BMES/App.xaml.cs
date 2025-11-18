@@ -22,7 +22,8 @@ namespace BMES
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            //containerRegistry.RegisterSingleton<IOpcUaClient, OpcUaClient>();
+            containerRegistry.RegisterSingleton<IOpcUaClient, OpcUaClient>();
+            containerRegistry.RegisterSingleton<IOpcUaManager, OpcUaManager>();
         }
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)
         {
