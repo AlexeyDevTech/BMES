@@ -25,7 +25,7 @@ namespace BMES.Core
             _logger = logger;
         }
 
-        public OpcUaClient() : this("opc.tcp://localhost:4840") { }
+        public OpcUaClient() : this("opc.tcp://localhost:54000") { }
 
         public bool IsConnected => _session != null && _session.Connected;
 

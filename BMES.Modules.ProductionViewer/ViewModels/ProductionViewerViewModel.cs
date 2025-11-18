@@ -10,6 +10,8 @@ namespace BMES.Modules.ProductionViewer.ViewModels
 {
     public class ProductionViewerViewModel : BindableBase, INavigationAware, IDisposable
     {
+        public const string PLCTag = "ModbusPLC.PLC";
+
         private readonly IOpcUaManager _opcUaManager;
         private readonly List<IDisposable> _subscriptions = new List<IDisposable>();
 
@@ -51,13 +53,13 @@ namespace BMES.Modules.ProductionViewer.ViewModels
         {
             try
             {
-                _subscriptions.Add(_opcUaManager.Subscribe<double>("ns=2;s=OutdoorTemperature")
+                _subscriptions.Add(_opcUaManager.Subscribe<double>($"ns=2;s={PLCTag}.TempOut")
                     .Subscribe(value => OutdoorTemperature = value));
 
-                _subscriptions.Add(_opcUaManager.Subscribe<double>("ns=2;s=IndoorTemperature")
+                _subscriptions.Add(_opcUaManager.Subscribe<double>($"ns=2;s={PLCTag}.MidTemp")
                     .Subscribe(value => IndoorTemperature = value));
 
-                _subscriptions.Add(_opcUaManager.Subscribe<int>("ns=2;s=TvoHumidity")
+                _subscriptions.Add(_opcUaManager.Subscribe<int>($"ns=2;s={PLCTag}.Hudimity")
                     .Subscribe(value => TvoHumidity = value));
             }
             catch (Exception ex)

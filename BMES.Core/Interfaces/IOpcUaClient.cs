@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Workstation.ServiceModel.Ua;
+using Opc.Ua;
 
 namespace BMES.Core.Interfaces
 {
