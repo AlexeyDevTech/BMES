@@ -45,12 +45,33 @@ namespace BMES.Modules.ProductionViewer.ViewModels
             set { SetProperty(ref _isConnected, value); }
         }
 
+        private bool _fc1Forward;
+        public bool Fc1Forward
+        {
+            get => _fc1Forward;
+            set { SetProperty(ref _fc1Forward, value); }
+        }
+
         public DelegateCommand ConnectCommand { get; private set; }
+        public DelegateCommand ToggleFc1ForwardCommand { get; private set; }
 
         public ProductionViewerViewModel(IOpcUaManager opcUaManager)
         {
             _opcUaManager = opcUaManager;
             ConnectCommand = new DelegateCommand(async () => await ConnectAsync());
+            ToggleFc1ForwardCommand = new DelegateCommand(async () => await ToggleFc1Forward());
+        }
+
+        private async Task ToggleFc1Forward()
+        {
+            try
+            {
+                await _opcUaManager.WriteAsync($"ns=2;s={PLCTag}.fc1Forward", !Fc1Forward);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to write to fc1Forward tag: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private async Task ConnectAsync()
@@ -99,6 +120,9 @@ namespace BMES.Modules.ProductionViewer.ViewModels
 
                 _subscriptions.Add((await _opcUaManager.SubscribeAsync<int>($"ns=2;s={PLCTag}.Hudimity"))
                     .Subscribe(value => TvoHumidity = value));
+
+                _subscriptions.Add((await _opcUaManager.SubscribeAsync<bool>($"ns=2;s={PLCTag}.fc1Forward"))
+                    .Subscribe(value => Fc1Forward = value));
             }
             catch (Exception ex)
             {

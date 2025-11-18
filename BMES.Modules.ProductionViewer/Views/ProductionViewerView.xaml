@@ -507,6 +507,13 @@
                                 <Button Command="{Binding ConnectCommand}" Content="Подключиться" Margin="0,5,0,0" />
                             </StackPanel>
                         </Border>
+                        <Border Style="{StaticResource DataBlockStyle}">
+                            <StackPanel>
+                                <TextBlock Style="{StaticResource SubHeaderStyle}" Text="Конвейер:" />
+                                <CheckBox IsChecked="{Binding Fc1Forward}" Content="fc1Forward" Foreground="White" IsEnabled="False"/>
+                                <Button Command="{Binding ToggleFc1ForwardCommand}" Content="Старт/Стоп" Margin="0,5,0,0" />
+                            </StackPanel>
+                        </Border>
                     </StackPanel>
                 </Grid>
             </Border>
