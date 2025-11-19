@@ -98,6 +98,72 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+
+        <!--  Стиль для кнопок управления конвейером  -->
+        <Style x:Key="ConveyorButtonStyle" TargetType="Button">
+            <Setter Property="Width" Value="44" />
+            <Setter Property="Height" Value="44" />
+            <Setter Property="FontSize" Value="24" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Margin" Value="5,0" />
+            <Setter Property="Background" Value="#4CAF50" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="4">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#45a049"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#3e8e41"/>
+                            </Trigger>
+                            <DataTrigger Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="False">
+                                <Setter TargetName="border" Property="Background" Value="#555"/>
+                                <Setter Property="Foreground" Value="#999"/>
+                            </DataTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!--  Стиль для круглой кнопки Stop  -->
+        <Style x:Key="StopButtonStyle" TargetType="Button" BasedOn="{StaticResource ConveyorButtonStyle}">
+            <Setter Property="Background" Value="#f44336" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border"
+                                Width="{TemplateBinding Width}"
+                                Height="{TemplateBinding Height}"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="22">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#e53935"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#d32f2f"/>
+                            </Trigger>
+                             <DataTrigger Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="False">
+                                <Setter TargetName="border" Property="Background" Value="#555"/>
+                                <Setter Property="Foreground" Value="#999"/>
+                            </DataTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </UserControl.Resources>
     <Grid>
         <TextBlock
@@ -509,9 +575,32 @@
                         </Border>
                         <Border Style="{StaticResource DataBlockStyle}">
                             <StackPanel>
-                                <TextBlock Style="{StaticResource SubHeaderStyle}" Text="Конвейер:" />
+                                <TextBlock Style="{StaticResource SubHeaderStyle}" Text="Конвейер 1:" />
                                 <CheckBox IsChecked="{Binding Fc1Forward}" Content="fc1Forward" Foreground="White" IsEnabled="False"/>
                                 <Button Command="{Binding ToggleFc1ForwardCommand}" Content="Старт/Стоп" Margin="0,5,0,0" />
+                            </StackPanel>
+                        </Border>
+                        <Border Style="{StaticResource DataBlockStyle}">
+                            <StackPanel>
+                                <TextBlock Style="{StaticResource SubHeaderStyle}" Text="Конвейер 2:" />
+                                <Grid Margin="0,5,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Button Grid.Column="0" HorizontalAlignment="Center" Command="{Binding SetFc2BackwardCommand}" Style="{StaticResource ConveyorButtonStyle}" Content="◀" ToolTip="Назад"/>
+                                    <Button Grid.Column="1" HorizontalAlignment="Center" Command="{Binding SetFc2StopCommand}" Style="{StaticResource StopButtonStyle}" Content="■" ToolTip="Стоп"/>
+                                    <Button Grid.Column="2" HorizontalAlignment="Center" Command="{Binding SetFc2ForwardCommand}" Style="{StaticResource ConveyorButtonStyle}" Content="▶" ToolTip="Вперед"/>
+                                </Grid>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5,0,0">
+                                    <TextBlock Text="Назад:" Style="{StaticResource LabelStyle}" VerticalAlignment="Center"/>
+                                    <CheckBox IsChecked="{Binding Fc2Backward}" IsEnabled="False" Margin="5,0,10,0"/>
+                                    <TextBlock Text="Стоп:" Style="{StaticResource LabelStyle}" VerticalAlignment="Center"/>
+                                    <CheckBox IsChecked="{Binding Fc2Stop}" IsEnabled="False" Margin="5,0,10,0"/>
+                                    <TextBlock Text="Вперед:" Style="{StaticResource LabelStyle}" VerticalAlignment="Center"/>
+                                    <CheckBox IsChecked="{Binding Fc2Forward}" IsEnabled="False" Margin="5,0,0,0"/>
+                                </StackPanel>
                             </StackPanel>
                         </Border>
                     </StackPanel>
