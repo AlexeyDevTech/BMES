@@ -199,7 +199,7 @@ namespace BMES.Modules.ProductionViewer.ViewModels
                     .Subscribe(value => IndoorTemperature = value / 10));
 
                 _subscriptions.Add((await _opcUaManager.SubscribeAsync<int>($"ns=2;s={PLCTag}.Hudimity"))
-                    .Subscribe(value => TvoHumidity = value));
+                    .Subscribe(value => TvoHumidity = value / 10));
 
                 _subscriptions.Add((await _opcUaManager.SubscribeAsync<bool>($"ns=2;s={PLCTag}.fc1Forward"))
                     .Subscribe(value => Fc1Forward = value));
