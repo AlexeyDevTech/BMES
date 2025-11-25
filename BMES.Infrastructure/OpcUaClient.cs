@@ -1,32 +1,47 @@
-﻿using BMES.Core.Interfaces;
+using BMES.Contracts.Events;
+using BMES.Contracts.Interfaces;
+using BMES.Core.Models;
 using Microsoft.Extensions.Logging;
 using Opc.Ua;
 using Opc.Ua.Client;
-//using Org.BouncyCastle.Asn1.Cms;
+using Polly;
+using Polly.Retry;
+using Prism.Events;
 using System.Collections.Concurrent;
 using System.Reactive.Linq;
 
-namespace BMES.Core
+namespace BMES.Infrastructure
 {
     public class OpcUaClient : IOpcUaClient, IAsyncDisposable
     {
         private readonly string _serverUrl;
         private readonly ILogger<OpcUaClient>? _logger;
+        private readonly IEventAggregator _eventAggregator;
         private Session? _session;
         private readonly SemaphoreSlim _sessionLock = new SemaphoreSlim(1, 1);
+        private readonly AsyncRetryPolicy _retryPolicy;
 
         // Храним подписки чтобы корректно удалить при Disconnect
         private readonly ConcurrentBag<Subscription> _subscriptions = new ConcurrentBag<Subscription>();
         private bool _disposed = false;
 
-        public OpcUaClient(string serverUrl, ILogger<OpcUaClient>? logger = null)
+        public OpcUaClient(ILogger<OpcUaClient>? logger, IEventAggregator eventAggregator) : this("opc.tcp://localhost:54000", logger, eventAggregator)
+        {
+        }
+
+        private OpcUaClient(string serverUrl, ILogger<OpcUaClient>? logger, IEventAggregator eventAggregator)
         {
             _serverUrl = serverUrl ?? throw new ArgumentNullException(nameof(serverUrl));
             _logger = logger;
+            _eventAggregator = eventAggregator;
+            _retryPolicy = Policy.Handle<Exception>()
+                .WaitAndRetryAsync(5, attempt => TimeSpan.FromSeconds(Math.Pow(2, attempt)),
+                    (exception, timespan, context) =>
+                    {
+                        _logger?.LogWarning("Connection failed. Retrying in {timespan}. Error: {exception}", timespan, exception.Message);
+                    });
         }
-
-        public OpcUaClient() : this("opc.tcp://localhost:54000") { }
-
+        
         public bool IsConnected => _session != null && _session.Connected;
 
         public async Task ConnectAsync(CancellationToken cancellationToken = default)
@@ -130,6 +145,8 @@ namespace BMES.Core
                     throw new OpcUaException("Session creation succeeded but session is not connected.");
                 }
 
+                _session.KeepAlive += OnSessionKeepAlive;
+
                 _logger?.LogInformation("Connected to OPC UA server at {ServerUrl}. SessionId: {SessionId}", _serverUrl, _session.SessionId);
             }
             catch (Exception ex)
@@ -142,7 +159,16 @@ namespace BMES.Core
                 _sessionLock.Release();
             }
         }
-
+        
+        private void OnSessionKeepAlive(ISession session, KeepAliveEventArgs e)
+        {
+            if (ServiceResult.IsBad(e.Status))
+            {
+                _logger?.LogWarning("OPC UA session keep-alive failed. Reconnecting...");
+                _retryPolicy.ExecuteAsync(() => ConnectAsync());
+            }
+        }
+        
         public async Task DisconnectAsync(CancellationToken cancellationToken = default)
         {
             await _sessionLock.WaitAsync(cancellationToken).ConfigureAwait(false);
@@ -150,6 +176,7 @@ namespace BMES.Core
             {
                 if (_session != null)
                 {
+                    _session.KeepAlive -= OnSessionKeepAlive;
                     try
                     {
                         // Удаляем и диспоузим все подписки, которые мы создавали
@@ -303,10 +330,63 @@ namespace BMES.Core
             }
         }
 
+        public void SubscribeToTag(string nodeId)
+        {
+            var subscription = _session.DefaultSubscription;
+            var monitoredItem = new MonitoredItem(subscription.DefaultItem)
+            {
+                StartNodeId = new NodeId(nodeId),
+                AttributeId = Attributes.Value,
+                SamplingInterval = 1000, 
+            };
+            monitoredItem.Notification += OnMonitoredItemNotification;
+            subscription.AddItem(monitoredItem);
+            subscription.ApplyChanges();
+        }
+        private void OnMonitoredItemNotification(MonitoredItem item, MonitoredItemNotificationEventArgs e)
+        {
+            var value = e.NotificationValue as DataValue;
+            _eventAggregator.GetEvent<TagValueChangedEvent>().Publish(new TagValue(item.StartNodeId.ToString(), value));
+        }
+
+        public void SubscribeToAlarm(string nodeId, AlarmSeverity severity)
+        {
+            var subscription = _session.DefaultSubscription;
+            var monitoredItem = new MonitoredItem(subscription.DefaultItem)
+            {
+                StartNodeId = new NodeId(nodeId),
+                AttributeId = Attributes.Value,
+                SamplingInterval = 1000,
+                DisplayName = severity.ToString()
+            };
+            monitoredItem.Notification += OnAlarmNotification;
+            subscription.AddItem(monitoredItem);
+            subscription.ApplyChanges();
+        }
+
+        private void OnAlarmNotification(MonitoredItem item, MonitoredItemNotificationEventArgs e)
+        {
+            var value = e.NotificationValue as DataValue;
+            if (value != null && Convert.ToBoolean(value.Value))
+            {
+                var alarm = new Core.Models.AlarmEvent
+                {
+                    NodeId = item.StartNodeId.ToString(),
+                    IsActive = true,
+                    IsAcknowledged = false,
+                    Message = $"Alarm for {item.StartNodeId}",
+                    Severity = (AlarmSeverity)Enum.Parse(typeof(AlarmSeverity), item.DisplayName),
+                    Timestamp = DateTime.UtcNow
+                };
+                _eventAggregator.GetEvent<AlarmEventTriggered>().Publish(alarm);
+            }
+        }
+
         /// <summary>
         /// Создаёт подписку и мониторит значение nodeId. Возвращает IObservable дата-стрима значений.
         /// Асинхронная версия (чтобы не блокировать поток).
         /// </summary>
+        [Obsolete("Use SubscribeToTag instead.")]
         public async Task<IObservable<DataValue>> SubscribeAsync(string nodeId, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(nodeId)) throw new ArgumentNullException(nameof(nodeId));
@@ -386,3 +466,4 @@ namespace BMES.Core
         public OpcUaException(string message, Exception? innerException = null) : base(message, innerException) { }
     }
 }
+

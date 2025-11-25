@@ -1,9 +1,10 @@
-﻿using Opc.Ua;
+using BMES.Core.Models;
+using Opc.Ua;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace BMES.Core.Interfaces
+namespace BMES.Contracts.Interfaces
 {
     public interface IOpcUaClient
     {
@@ -12,6 +13,7 @@ namespace BMES.Core.Interfaces
         Task DisconnectAsync(CancellationToken cancellationToken = default);
         Task WriteAsync<T>(string nodeId, T value, CancellationToken cancellationToken = default);
         Task<T> ReadAsync<T>(string nodeId, CancellationToken cancellationToken = default);
-        Task<IObservable<DataValue>> SubscribeAsync(string nodeId, CancellationToken cancellationToken = default);
+        void SubscribeToTag(string nodeId);
+        void SubscribeToAlarm(string nodeId, AlarmSeverity severity);
     }
 }

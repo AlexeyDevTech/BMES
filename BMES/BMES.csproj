@@ -5,7 +5,11 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.0" />
+    <PackageReference Include="Prism.Logging.Serilog" Version="7.2.0.1423" />
     <PackageReference Include="Prism.Unity" Version="8.1.97" />
+    <PackageReference Include="Serilog.Extensions.Logging" Version="8.0.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BMES.Core\BMES.Core.csproj" />
@@ -13,5 +17,15 @@
     <ProjectReference Include="..\BMES.Modules.LeftMenu\BMES.Modules.LeftMenu.csproj" />
     <ProjectReference Include="..\BMES.Modules.ProductionViewer\BMES.Modules.ProductionViewer.csproj" />
     <ProjectReference Include="..\BMES.Regions\BMES.Regions.csproj" />
+    <ProjectReference Include="..\BMES.Infrastructure\BMES.Infrastructure.csproj" />
+    <ProjectReference Include="..\BMES.Contracts\BMES.Contracts.csproj" />
+    <ProjectReference Include="..\BMES.Modules.Mimic\BMES.Modules.Mimic.csproj" />
+    <ProjectReference Include="..\BMES.Modules.Alarms\BMES.Modules.Alarms.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="opc_tags.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 </Project>

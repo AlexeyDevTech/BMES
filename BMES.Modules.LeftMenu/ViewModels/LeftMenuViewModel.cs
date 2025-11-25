@@ -3,40 +3,24 @@ using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Regions;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Input;
 
 namespace BMES.Modules.LeftMenu.ViewModels
 {
     public class LeftMenuViewModel : BindableBase
     {
-        private IRegionManager _reg;
+        private readonly IRegionManager _regionManager;
+        public DelegateCommand<string> NavigateCommand { get; private set; }
 
-        public ICommand SelectMenuCommand { get; set; }
-        public LeftMenuViewModel(IRegionManager reg)
+        public LeftMenuViewModel(IRegionManager regionManager)
         {
-            _reg = reg;
-            SelectMenuCommand = new DelegateCommand<object>(SelectMenu);
-
+            _regionManager = regionManager;
+            NavigateCommand = new DelegateCommand<string>(Navigate);
         }
-        private void SelectMenu(object obj)
+
+        private void Navigate(string navigationPath)
         {
-            var menuItem = Int32.Parse(obj as string);
-            switch (menuItem)
-            {
-                case 1:
-                    _reg.RequestNavigate(RegionNames.ContentRegion, "ProductionViewer");
-                    break;
-                case 2:
-                    break;
-                case 3:
-                    break;
-                case 4:
-                    break;
-                case 5:
-                    break;
-            }
+            _regionManager.RequestNavigate(RegionNames.ContentRegion, navigationPath);
         }
     }
 }

@@ -1,20 +1,22 @@
-﻿using BMES.Core.Interfaces;
+﻿using BMES.Contracts.Events;
+using BMES.Contracts.Interfaces;
 using Prism.Commands;
+using Prism.Events;
 using Prism.Mvvm;
 using Prism.Regions;
 using System;
 using System.Collections.Generic;
-using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using Unity;
 
 namespace BMES.Modules.ProductionViewer.ViewModels
 {
     public class ProductionViewerViewModel : BindableBase, INavigationAware, IDisposable
     {
-        public const string PLCTag = "ModbusPLC.PLC";
-
         private readonly IOpcUaManager _opcUaManager;
+        private readonly ITagConfigurationService _tagConfigService;
+        private readonly IEventAggregator _eventAggregator;
         private readonly List<IDisposable> _subscriptions = new List<IDisposable>();
 
         private double _outdoorTemperature;
@@ -77,22 +79,61 @@ namespace BMES.Modules.ProductionViewer.ViewModels
         public DelegateCommand SetFc2BackwardCommand { get; private set; }
         public DelegateCommand SetFc2StopCommand { get; private set; }
 
-        public ProductionViewerViewModel(IOpcUaManager opcUaManager)
+        public ProductionViewerViewModel(IUnityContainer container)
         {
-            _opcUaManager = opcUaManager;
+            //_opcUaManager = opcUaManager;
+            _opcUaManager = container.Resolve<IOpcUaManager>();
+            _tagConfigService = container.Resolve<ITagConfigurationService>();
+            _eventAggregator = container.Resolve<IEventAggregator>();
+            //_tagConfigService = tagConfigService;
+            //_eventAggregator = eventAggregator;
+
             ConnectCommand = new DelegateCommand(async () => await ConnectAsync());
             ToggleFc1ForwardCommand = new DelegateCommand(async () => await ToggleFc1Forward());
             SetFc2ForwardCommand = new DelegateCommand(async () => await SetFc2Forward());
             SetFc2BackwardCommand = new DelegateCommand(async () => await SetFc2Backward());
             SetFc2StopCommand = new DelegateCommand(async () => await SetFc2Stop());
 
+            _eventAggregator.GetEvent<TagValueChangedEvent>().Subscribe(OnTagValueChanged);
+        }
+
+        private void OnTagValueChanged(TagValue tagValue)
+        {
+            var tagName = _tagConfigService.GetNodeId(tagValue.NodeId);
+            if (string.IsNullOrEmpty(tagName))
+                return;
+
+            switch (tagName)
+            {
+                case "TempOut":
+                    OutdoorTemperature = Convert.ToDouble(tagValue.Value.Value) / 10;
+                    break;
+                case "MidTemp":
+                    IndoorTemperature = Convert.ToDouble(tagValue.Value.Value) / 10;
+                    break;
+                case "Hudimity":
+                    TvoHumidity = Convert.ToInt32(tagValue.Value.Value) / 10;
+                    break;
+                case "fc1Forward":
+                    Fc1Forward = Convert.ToBoolean(tagValue.Value.Value);
+                    break;
+                case "fc2Forward":
+                    Fc2Forward = Convert.ToBoolean(tagValue.Value.Value);
+                    break;
+                case "fc2Reverse":
+                    Fc2Backward = Convert.ToBoolean(tagValue.Value.Value);
+                    break;
+                case "fc2Stop":
+                    Fc2Stop = Convert.ToBoolean(tagValue.Value.Value);
+                    break;
+            }
         }
 
         private async Task ToggleFc1Forward()
         {
             try
             {
-                await _opcUaManager.WriteAsync($"ns=2;s={PLCTag}.fc1Forward", !Fc1Forward);
+                await _opcUaManager.WriteAsync(_tagConfigService.GetNodeId("fc1Forward"), !Fc1Forward);
             }
             catch (Exception ex)
             {
@@ -106,9 +147,9 @@ namespace BMES.Modules.ProductionViewer.ViewModels
             {
                 var tasks = new List<Task>
                 {
-                    _opcUaManager.WriteAsync($"ns=2;s={PLCTag}.fc2Forward", true),
-                    _opcUaManager.WriteAsync($"ns=2;s={PLCTag}.fc2Reverse", false),
-                    _opcUaManager.WriteAsync($"ns=2;s={PLCTag}.fc2Stop", false)
+                    _opcUaManager.WriteAsync(_tagConfigService.GetNodeId("fc2Forward"), true),
+                    _opcUaManager.WriteAsync(_tagConfigService.GetNodeId("fc2Reverse"), false),
+                    _opcUaManager.WriteAsync(_tagConfigService.GetNodeId("fc2Stop"), false)
                 };
                 await Task.WhenAll(tasks);
             }
@@ -124,9 +165,9 @@ namespace BMES.Modules.ProductionViewer.ViewModels
             {
                 var tasks = new List<Task>
                 {
-                    _opcUaManager.WriteAsync($"ns=2;s={PLCTag}.fc2Forward", false),
-                    _opcUaManager.WriteAsync($"ns=2;s={PLCTag}.fc2Reverse", true),
-                    _opcUaManager.WriteAsync($"ns=2;s={PLCTag}.fc2Stop", false)
+                    _opcUaManager.WriteAsync(_tagConfigService.GetNodeId("fc2Forward"), false),
+                    _opcUaManager.WriteAsync(_tagConfigService.GetNodeId("fc2Reverse"), true),
+                    _opcUaManager.WriteAsync(_tagConfigService.GetNodeId("fc2Stop"), false)
                 };
                 await Task.WhenAll(tasks);
             }
@@ -142,9 +183,9 @@ namespace BMES.Modules.ProductionViewer.ViewModels
             {
                 var tasks = new List<Task>
                 {
-                    _opcUaManager.WriteAsync($"ns=2;s={PLCTag}.fc2Forward", false),
-                    _opcUaManager.WriteAsync($"ns=2;s={PLCTag}.fc2Reverse", false),
-                    _opcUaManager.WriteAsync($"ns=2;s={PLCTag}.fc2Stop", true)
+                    _opcUaManager.WriteAsync(_tagConfigService.GetNodeId("fc2Forward"), false),
+                    _opcUaManager.WriteAsync(_tagConfigService.GetNodeId("fc2Reverse"), false),
+                    _opcUaManager.WriteAsync(_tagConfigService.GetNodeId("fc2Stop"), true)
                 };
                 await Task.WhenAll(tasks);
             }
@@ -162,7 +203,7 @@ namespace BMES.Modules.ProductionViewer.ViewModels
                 IsConnected = _opcUaManager.IsConnected;
                 if (IsConnected)
                 {
-                    await SubscribeToTags();
+                    SubscribeToTags();
                 }
             }
             catch (Exception ex)
@@ -175,43 +216,28 @@ namespace BMES.Modules.ProductionViewer.ViewModels
 
         public void OnNavigatedFrom(NavigationContext navigationContext)
         {
-            // Dispose all subscriptions when navigating away
-            Dispose();
         }
 
-        public async void OnNavigatedTo(NavigationContext navigationContext)
+        public void OnNavigatedTo(NavigationContext navigationContext)
         {
             IsConnected = _opcUaManager.IsConnected;
             if (IsConnected)
             {
-                await SubscribeToTags();
+                SubscribeToTags();
             }
         }
 
-        private async Task SubscribeToTags()
+        private void SubscribeToTags()
         {
             try
             {
-                _subscriptions.Add((await _opcUaManager.SubscribeAsync<double>($"ns=2;s={PLCTag}.TempOut"))
-                    .Subscribe(value => OutdoorTemperature = value / 10));
-
-                _subscriptions.Add((await _opcUaManager.SubscribeAsync<double>($"ns=2;s={PLCTag}.MidTemp"))
-                    .Subscribe(value => IndoorTemperature = value / 10));
-
-                _subscriptions.Add((await _opcUaManager.SubscribeAsync<int>($"ns=2;s={PLCTag}.Hudimity"))
-                    .Subscribe(value => TvoHumidity = value / 10));
-
-                _subscriptions.Add((await _opcUaManager.SubscribeAsync<bool>($"ns=2;s={PLCTag}.fc1Forward"))
-                    .Subscribe(value => Fc1Forward = value));
-
-                _subscriptions.Add((await _opcUaManager.SubscribeAsync<bool>($"ns=2;s={PLCTag}.fc2Forward"))
-                    .Subscribe(value => Fc2Forward = value));
-
-                _subscriptions.Add((await _opcUaManager.SubscribeAsync<bool>($"ns=2;s={PLCTag}.fc2Reverse"))
-                    .Subscribe(value => Fc2Backward = value));
-
-                _subscriptions.Add((await _opcUaManager.SubscribeAsync<bool>($"ns=2;s={PLCTag}.fc2Stop"))
-                    .Subscribe(value => Fc2Stop = value));
+                _opcUaManager.SubscribeToTag(_tagConfigService.GetNodeId("TempOut"));
+                _opcUaManager.SubscribeToTag(_tagConfigService.GetNodeId("MidTemp"));
+                _opcUaManager.SubscribeToTag(_tagConfigService.GetNodeId("Hudimity"));
+                _opcUaManager.SubscribeToTag(_tagConfigService.GetNodeId("fc1Forward"));
+                _opcUaManager.SubscribeToTag(_tagConfigService.GetNodeId("fc2Forward"));
+                _opcUaManager.SubscribeToTag(_tagConfigService.GetNodeId("fc2Reverse"));
+                _opcUaManager.SubscribeToTag(_tagConfigService.GetNodeId("fc2Stop"));
             }
             catch (Exception ex)
             {
@@ -221,11 +247,7 @@ namespace BMES.Modules.ProductionViewer.ViewModels
 
         public void Dispose()
         {
-            foreach (var sub in _subscriptions)
-            {
-                sub.Dispose();
-            }
-            _subscriptions.Clear();
+            _eventAggregator.GetEvent<TagValueChangedEvent>().Unsubscribe(OnTagValueChanged);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using BMES.Core.Interfaces;
+﻿
 using Prism.Mvvm;
 
 namespace BMES.ViewModels

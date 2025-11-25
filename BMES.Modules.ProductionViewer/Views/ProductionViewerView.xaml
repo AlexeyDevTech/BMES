@@ -177,7 +177,7 @@
                         </Grid>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="background" Value="#1976D2"/>
+                                <Setter TargetName="background" Property="Fill" Value="#1976D2"/>
                                 <Setter Property="Effect">
                                     <Setter.Value>
                                         <DropShadowEffect ShadowDepth="2" BlurRadius="8" Opacity="0.3" Color="Black"/>
@@ -185,7 +185,7 @@
                                 </Setter>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="background" Value="#1565C0"/>
+                                <Setter TargetName="background" Property="Fill" Value="#1565C0"/>
                                 <Setter Property="Effect">
                                     <Setter.Value>
                                         <DropShadowEffect ShadowDepth="0" BlurRadius="2" Opacity="0.2" Color="Black"/>
@@ -193,7 +193,7 @@
                                 </Setter>
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="False">
-                                <Setter TargetName="background" Value="#BDBDBD" />
+                                <Setter TargetName="background" Property="Fill" Value="#BDBDBD" />
                                 <Setter Property="Foreground" Value="#757575" />
                                 <Setter Property="Effect" Value="{x:Null}"/>
                             </Trigger>
@@ -215,13 +215,13 @@
                         </Grid>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="background" Value="#D32F2F"/>
+                                <Setter TargetName="background" Property="Fill" Value="#D32F2F"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="background" Value="#C62828"/>
+                                <Setter TargetName="background" Property="Fill" Value="#C62828"/>
                             </Trigger>
                              <Trigger Property="IsEnabled" Value="False">
-                                <Setter TargetName="background" Value="#BDBDBD" />
+                                <Setter TargetName="background" Property="Fill" Value="#BDBDBD" />
                                 <Setter Property="Foreground" Value="#757575" />
                             </Trigger>
                         </ControlTemplate.Triggers>

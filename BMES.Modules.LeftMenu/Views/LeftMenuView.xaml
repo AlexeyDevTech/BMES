@@ -87,8 +87,8 @@
         <StackPanel>
             <RadioButton
                 Height="50"
-                Command="{Binding SelectMenuCommand}"
-                CommandParameter="1"
+                Command="{Binding NavigateCommand}"
+                CommandParameter="ProductionViewer"
                 IsChecked="True"
                 Style="{StaticResource LeftMenuButtonStyle}"
                 ToolTip="Главное меню">
@@ -96,35 +96,55 @@
             </RadioButton>
             <RadioButton
                 Height="50"
-                Command="{Binding SelectMenuCommand}"
-                CommandParameter="2"
+                Command="{Binding NavigateCommand}"
+                CommandParameter="ControlView"
                 Style="{StaticResource LeftMenuButtonStyle}"
                 ToolTip="Управление">
                 <ContentControl Width="24" Content="{StaticResource ControlIcon}" />
             </RadioButton>
             <RadioButton
                 Height="50"
-                Command="{Binding SelectMenuCommand}"
-                CommandParameter="3"
+                Command="{Binding NavigateCommand}"
+                CommandParameter="StatsView"
                 Style="{StaticResource LeftMenuButtonStyle}"
                 ToolTip="Статистика">
                 <ContentControl Width="24" Content="{StaticResource StatsIcon}" />
             </RadioButton>
             <RadioButton
                 Height="50"
-                Command="{Binding SelectMenuCommand}"
-                CommandParameter="4"
+                Command="{Binding NavigateCommand}"
+                CommandParameter="DeviceView"
                 Style="{StaticResource LeftMenuButtonStyle}"
                 ToolTip="Устройства">
                 <ContentControl Width="24" Content="{StaticResource DeviceIcon}" />
             </RadioButton>
             <RadioButton
                 Height="50"
-                Command="{Binding SelectMenuCommand}"
-                CommandParameter="5"
+                Command="{Binding NavigateCommand}"
+                CommandParameter="MoreView"
                 Style="{StaticResource LeftMenuButtonStyle}"
                 ToolTip="Прочее">
                 <ContentControl Width="24" Content="{StaticResource MoreIcon}" />
+            </RadioButton>
+            <RadioButton
+                Height="50"
+                Command="{Binding NavigateCommand}"
+                CommandParameter="MimicView"
+                Style="{StaticResource LeftMenuButtonStyle}"
+                ToolTip="Мнемосхема">
+                <ContentControl Width="24">
+                    <Path Fill="White" Data="M12,2C6.48,2 2,6.48 2,12s4.48,10 10,10 10,-4.48 10,-10S17.52,2 12,2z M12,20c-4.41,0 -8,-3.59 -8,-8s3.59,-8 8,-8 8,3.59 8,8 -3.59,8 -8,8z M12.5,7L11,7v6l5.25,3.15 0.75,-1.23 -4.5,-2.67z" />
+                </ContentControl>
+            </RadioButton>
+            <RadioButton
+                Height="50"
+                Command="{Binding NavigateCommand}"
+                CommandParameter="AlarmsView"
+                Style="{StaticResource LeftMenuButtonStyle}"
+                ToolTip="Аварии">
+                <ContentControl Width="24">
+                    <Path Fill="White" Data="M12,22c1.1,0 2,-0.9 2,-2h-4c0,1.1 0.9,2 2,2z M18,16v-5c0,-3.07 -1.63,-5.64 -4.5,-6.32L13.5,4h-3L10.5,4.68C7.63,5.36 6,7.92 6,11v5l-2,2v1h16v-1l-2,-2z" />
+                </ContentControl>
             </RadioButton>
         </StackPanel>
     </Grid>
