@@ -1,5 +1,8 @@
-﻿using System.Windows;
+﻿using System;
+using System.Linq;
+using System.Windows;
 using BMES.Contracts.Interfaces;
+using BMES.Core;
 using BMES.Infrastructure;
 using BMES.Infrastructure.Persistence;
 using BMES.Infrastructure.Repositories;
@@ -34,6 +37,9 @@ namespace BMES
                 .WriteTo.File("logs/bmes-.txt", rollingInterval: RollingInterval.Day)
                 .CreateLogger();
             containerRegistry.RegisterInstance<ILoggerFactory>(new Serilog.Extensions.Logging.SerilogLoggerFactory());
+
+            // Register ILogger<T>
+            containerRegistry.Register(typeof(Microsoft.Extensions.Logging.ILogger<>), typeof(BMES.Core.LoggerAdapter<>));
 
             // OPC UA Services
             containerRegistry.RegisterSingleton<IOpcUaClient, OpcUaClient>();
