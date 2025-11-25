@@ -454,3 +454,5 @@ $RECYCLE.BIN/
 !.vscode/extensions.json
 /.vscode
 /Печатная форма ЛЦП №1 - Приложение 4 - Схема технологических операций Потока№1.pdf
+.continue/**
+/plan.md
