@@ -12,7 +12,7 @@ namespace BMES.Core
             _logger = loggerFactory.CreateLogger<T>();
         }
 
-        public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
+        public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
         {
             _logger.Log(logLevel, eventId, state, exception, formatter);
         }
@@ -22,7 +22,7 @@ namespace BMES.Core
             return _logger.IsEnabled(logLevel);
         }
 
-        public IDisposable BeginScope<TState>(TState state)
+        public IDisposable? BeginScope<TState>(TState state) where TState : notnull
         {
             return _logger.BeginScope(state);
         }

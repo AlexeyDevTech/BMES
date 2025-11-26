@@ -13,11 +13,21 @@ namespace BMES.Infrastructure.Persistence
         public DbSet<AlarmEvent> AlarmEvents { get; set; }
         public DbSet<Recipe> Recipes { get; set; }
         public DbSet<RecipeParameter> RecipeParameters { get; set; }
+        public DbSet<MaterialLot> MaterialLots { get; set; }
+        public DbSet<ProcessWorkflow> ProcessWorkflows { get; set; }
+        public DbSet<WorkflowStep> WorkflowSteps { get; set; }
+        public DbSet<EquipmentStateLog> EquipmentStateLogs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            // Тут можно добавить конфигурацию моделей, если потребуется
+            // Configure TPH for WorkflowStep
+            modelBuilder.Entity<WorkflowStep>()
+                .HasDiscriminator<string>("StepType")
+                .HasValue<ControlStep>("ControlStep")
+                .HasValue<MonitorStep>("MonitorStep")
+                .HasValue<OperatorInstructionStep>("OperatorInstructionStep")
+                .HasValue<DataCollectionStep>("DataCollectionStep");
         }
     }
 }

@@ -3,6 +3,8 @@ using BMES.Core.Models;
 using BMES.Infrastructure.Persistence;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace BMES.Infrastructure.Repositories
 {
@@ -15,36 +17,36 @@ namespace BMES.Infrastructure.Repositories
             _context = context;
         }
 
-        public void AddOrder(ProductionOrder order)
+        public async Task AddOrderAsync(ProductionOrder order)
         {
-            _context.ProductionOrders.Add(order);
-            _context.SaveChanges();
+            await _context.ProductionOrders.AddAsync(order);
+            await _context.SaveChangesAsync();
         }
 
-        public void DeleteOrder(int id)
+        public async Task DeleteOrderAsync(int id)
         {
-            var order = _context.ProductionOrders.Find(id);
+            var order = await _context.ProductionOrders.FindAsync(id);
             if (order != null)
             {
                 _context.ProductionOrders.Remove(order);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
         }
 
-        public IEnumerable<ProductionOrder> GetAllOrders()
+        public async Task<IEnumerable<ProductionOrder>> GetAllOrdersAsync()
         {
-            return _context.ProductionOrders.ToList();
+            return await _context.ProductionOrders.ToListAsync();
         }
 
-        public ProductionOrder GetOrderById(int id)
+        public async Task<ProductionOrder> GetOrderByIdAsync(int id)
         {
-            return _context.ProductionOrders.Find(id);
+            return (await _context.ProductionOrders.FindAsync(id))!;
         }
 
-        public void UpdateOrder(ProductionOrder order)
+        public async Task UpdateOrderAsync(ProductionOrder order)
         {
             _context.ProductionOrders.Update(order);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
     }
 }

@@ -7,15 +7,21 @@ using BMES.Infrastructure;
 using BMES.Infrastructure.Persistence;
 using BMES.Infrastructure.Repositories;
 using BMES.Infrastructure.Services;
+using BMES.Modules.Alarms;
+using BMES.Modules.Genealogy;
 using BMES.Modules.Header;
 using BMES.Modules.LeftMenu;
+using BMES.Modules.Mimic;
 using BMES.Modules.ProductionViewer;
+using BMES.Modules.Recipes;
+using BMES.Modules.WorkflowEditor;
 using BMES.Views;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Prism.Ioc;
 using Prism.Modularity;
 using Serilog;
+//using Opc.Ua.Client.Session;
 
 namespace BMES
 {
@@ -44,6 +50,7 @@ namespace BMES
             // OPC UA Services
             containerRegistry.RegisterSingleton<IOpcUaClient, OpcUaClient>();
             containerRegistry.RegisterSingleton<IOpcUaManager, OpcUaManager>();
+            containerRegistry.RegisterSingleton<IOpcUaService, OpcUaManager>();
 
             // EF Core DbContext
             var optionsBuilder = new DbContextOptionsBuilder<BmesDbContext>();
@@ -53,18 +60,32 @@ namespace BMES
 
             // Repositories
             containerRegistry.Register<IOrderRepository, OrderRepository>();
+            containerRegistry.Register<IAlarmRepository, AlarmRepository>();
+            containerRegistry.Register<IRecipeRepository, RecipeRepository>();
+            containerRegistry.Register<IMaterialLotRepository, MaterialLotRepository>();
+            containerRegistry.Register<IProcessWorkflowRepository, ProcessWorkflowRepository>();
+            containerRegistry.Register<IEquipmentStateLogRepository, EquipmentStateLogRepository>();
 
             // Services
             containerRegistry.RegisterSingleton<ITagConfigurationService, TagConfigurationService>();
+            containerRegistry.RegisterSingleton<ICurrentUserService, CurrentUserService>();
+            containerRegistry.RegisterSingleton<IAuditService, AuditService>();
+            containerRegistry.RegisterSingleton<IWorkflowEngine, WorkflowEngine>();
+            containerRegistry.RegisterSingleton<IOeeCalculatorService, OeeCalculatorService>();
+            containerRegistry.RegisterSingleton<IProductionReportService, ProductionReportService>();
+            //containerRegistry.RegisterSingleton<ISessionFactory, SessionFactory>();
         }
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)
         {
             base.ConfigureModuleCatalog(moduleCatalog);
-            moduleCatalog.AddModule<HeaderModule>();
-            moduleCatalog.AddModule<LeftMenuModule>();
+            //moduleCatalog.AddModule<HeaderModule>();
+            //moduleCatalog.AddModule<LeftMenuModule>();
             moduleCatalog.AddModule<ProductionViewerModule>();
-            moduleCatalog.AddModule<BMES.Modules.Mimic.MimicModule>();
-            moduleCatalog.AddModule<BMES.Modules.Alarms.AlarmsModule>();
+            //moduleCatalog.AddModule<MimicModule>();
+            moduleCatalog.AddModule<AlarmsModule>();
+            moduleCatalog.AddModule<RecipesModule>();
+            moduleCatalog.AddModule<GenealogyModule>();
+            moduleCatalog.AddModule<WorkflowEditorModule>();
         }
     }
 }

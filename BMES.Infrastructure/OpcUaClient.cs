@@ -17,7 +17,7 @@ namespace BMES.Infrastructure
         private readonly string _serverUrl;
         private readonly ILogger<OpcUaClient>? _logger;
         private readonly IEventAggregator _eventAggregator;
-        private Session? _session;
+        private ISession? _session;
         private readonly SemaphoreSlim _sessionLock = new SemaphoreSlim(1, 1);
         private readonly AsyncRetryPolicy _retryPolicy;
 
@@ -25,15 +25,18 @@ namespace BMES.Infrastructure
         private readonly ConcurrentBag<Subscription> _subscriptions = new ConcurrentBag<Subscription>();
         private bool _disposed = false;
 
-        public OpcUaClient(ILogger<OpcUaClient>? logger, IEventAggregator eventAggregator) : this("opc.tcp://localhost:54000", logger, eventAggregator)
+        private readonly ISessionFactory _sessionFactory;
+
+        public OpcUaClient(ILogger<OpcUaClient>? logger, IEventAggregator eventAggregator, ISessionFactory sessionFactory) : this("opc.tcp://localhost:54000", logger, eventAggregator, sessionFactory)
         {
         }
 
-        private OpcUaClient(string serverUrl, ILogger<OpcUaClient>? logger, IEventAggregator eventAggregator)
+        private OpcUaClient(string serverUrl, ILogger<OpcUaClient>? logger, IEventAggregator eventAggregator, ISessionFactory sessionFactory)
         {
             _serverUrl = serverUrl ?? throw new ArgumentNullException(nameof(serverUrl));
             _logger = logger;
             _eventAggregator = eventAggregator;
+            _sessionFactory = sessionFactory;
             _retryPolicy = Policy.Handle<Exception>()
                 .WaitAndRetryAsync(5, attempt => TimeSpan.FromSeconds(Math.Pow(2, attempt)),
                     (exception, timespan, context) =>
@@ -104,7 +107,7 @@ namespace BMES.Infrastructure
                     EndpointDescriptionCollection endpoints;
                     using (var discovery = DiscoveryClient.Create(new Uri(_serverUrl)))
                     {
-                        endpoints = discovery.GetEndpoints(null);
+                        endpoints = await discovery.GetEndpointsAsync(null); // Use GetEndpointsAsync
                     }
 
                     // 2. Выбираем endpoint согласно параметру useSecurity (false = без шифрования)
@@ -130,14 +133,15 @@ namespace BMES.Infrastructure
                 // updateBeforeConnect = false, sessionName = приложение, timeout берём из конфига.
                 uint sessionTimeout = (uint)Math.Max(10000, config.ClientConfiguration.DefaultSessionTimeout);
 
-                _session = await Session.Create(
+                _session = await _sessionFactory.CreateAsync(
                     config,
                     configuredEndpoint,
                     false,                       // updateBeforeConnect
                     "BMES.OpcUaClient",          // sessionName
                     sessionTimeout,              // sessionTimeout (ms)
                     null,                        // userIdentity -> anonymous
-                    null                         // preferredLocales
+                    null,                        // preferredLocales
+                    cancellationToken
                 ).ConfigureAwait(false);
 
                 if (_session == null || !_session.Connected)
@@ -193,20 +197,20 @@ namespace BMES.Infrastructure
                             {
                                 _logger?.LogWarning(exSub, "Failed to delete subscription while disconnecting.");
                             }
-                            finally
-                            {
-                                // попытка удалить у сессии (без исключений)
-                                try { _session.RemoveSubscription(sub); } catch { }
-                                try { sub.Dispose(); } catch { }
-                            }
-                        }
-
-                        // Close session gracefully
-                        await _session.CloseAsync(cancellationToken).ConfigureAwait(false);
-                        _session.Dispose();
-                        _session = null;
-                        _logger?.LogInformation("Disconnected from OPC UA server.");
-                    }
+                                                        finally
+                                                        {
+                                                                                                                            // попытка удалить у сессии (без исключений)
+                                                                                                                            try { await _session!.RemoveSubscriptionAsync(sub).ConfigureAwait(false); } catch { } // Pass subscription object, use null-forgiving operator
+                                                                                                                            try { sub.Dispose(); } catch { }
+                                                                                                                        }
+                                                                                                                    }
+                                                                                            
+                                                                                                                    // Close session gracefully
+                                                                                                                    await _session!.CloseAsync(cancellationToken).ConfigureAwait(false); // Use null-forgiving operator
+                                                                                                                    _session.Dispose();
+                                                                                                                    _session = null;
+                                                                                                                    _logger?.LogInformation("Disconnected from OPC UA server.");
+                                                                                                                }
                     catch (Exception ex)
                     {
                         _logger?.LogError(ex, "Disconnection failed.");
@@ -330,7 +334,7 @@ namespace BMES.Infrastructure
             }
         }
 
-        public void SubscribeToTag(string nodeId)
+        public async void SubscribeToTag(string nodeId)
         {
             var subscription = _session.DefaultSubscription;
             var monitoredItem = new MonitoredItem(subscription.DefaultItem)
@@ -341,7 +345,7 @@ namespace BMES.Infrastructure
             };
             monitoredItem.Notification += OnMonitoredItemNotification;
             subscription.AddItem(monitoredItem);
-            subscription.ApplyChanges();
+            await subscription.ApplyChangesAsync();
         }
         private void OnMonitoredItemNotification(MonitoredItem item, MonitoredItemNotificationEventArgs e)
         {
@@ -349,7 +353,7 @@ namespace BMES.Infrastructure
             _eventAggregator.GetEvent<TagValueChangedEvent>().Publish(new TagValue(item.StartNodeId.ToString(), value));
         }
 
-        public void SubscribeToAlarm(string nodeId, AlarmSeverity severity)
+        public async void SubscribeToAlarm(string nodeId, AlarmSeverity severity)
         {
             var subscription = _session.DefaultSubscription;
             var monitoredItem = new MonitoredItem(subscription.DefaultItem)
@@ -361,7 +365,7 @@ namespace BMES.Infrastructure
             };
             monitoredItem.Notification += OnAlarmNotification;
             subscription.AddItem(monitoredItem);
-            subscription.ApplyChanges();
+            await subscription.ApplyChangesAsync();
         }
 
         private void OnAlarmNotification(MonitoredItem item, MonitoredItemNotificationEventArgs e)

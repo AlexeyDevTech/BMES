@@ -1,14 +1,15 @@
 using BMES.Core.Models;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace BMES.Contracts.Interfaces
 {
     public interface IOrderRepository
     {
-        ProductionOrder GetOrderById(int id);
-        IEnumerable<ProductionOrder> GetAllOrders();
-        void AddOrder(ProductionOrder order);
-        void UpdateOrder(ProductionOrder order);
-        void DeleteOrder(int id);
+        Task<ProductionOrder> GetOrderByIdAsync(int id);
+        Task<IEnumerable<ProductionOrder>> GetAllOrdersAsync();
+        Task AddOrderAsync(ProductionOrder order);
+        Task UpdateOrderAsync(ProductionOrder order);
+        Task DeleteOrderAsync(int id);
     }
 }

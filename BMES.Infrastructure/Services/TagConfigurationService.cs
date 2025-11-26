@@ -17,7 +17,7 @@ namespace BMES.Infrastructure.Services
             {
                 var json = File.ReadAllText(filePath);
                 var tags = JsonSerializer.Deserialize<List<TagConfiguration>>(json);
-                _tagNodeIds = tags.ToDictionary(t => t.Name, t => t.NodeId);
+                _tagNodeIds = tags?.Where(t => t.Name != null && t.NodeId != null).ToDictionary(t => t.Name!, t => t.NodeId!) ?? new Dictionary<string, string>();
             }
             else
             {
@@ -32,8 +32,8 @@ namespace BMES.Infrastructure.Services
 
         private class TagConfiguration
         {
-            public string Name { get; set; }
-            public string NodeId { get; set; }
+            public string? Name { get; set; }
+            public string? NodeId { get; set; }
         }
     }
 }

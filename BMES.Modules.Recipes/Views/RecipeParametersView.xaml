@@ -1,0 +1,15 @@
+<UserControl x:Class="BMES.Modules.Recipes.Views.RecipeParametersView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:models="clr-namespace:BMES.Core.Models;assembly=BMES.Core"
+             prism:ViewModelLocator.AutoWireViewModel="True">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Text="Recipe Parameters" FontWeight="Bold" Margin="5"/>
+        <DataGrid Grid.Row="1" ItemsSource="{Binding RecipeParameters}" AutoGenerateColumns="True" IsReadOnly="True"/>
+    </Grid>
+</UserControl>

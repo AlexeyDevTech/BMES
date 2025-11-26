@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="OPCFoundation.NetStandard.Opc.Ua" Version="1.5.377.22" />
-    <PackageReference Include="Prism.Core" Version="8.1.97" />
+    <PackageReference Include="Prism.Core" Version="9.0.537" />
   </ItemGroup>
 
   <PropertyGroup>

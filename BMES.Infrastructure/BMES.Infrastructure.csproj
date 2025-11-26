@@ -11,12 +11,14 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.0" />
     <PackageReference Include="OPCFoundation.NetStandard.Opc.Ua" Version="1.5.377.22" />
     <PackageReference Include="Polly" Version="8.6.5" />
-    <PackageReference Include="Prism.Core" Version="8.1.97" />
+    <PackageReference Include="Prism.Core" Version="9.0.537" />
+    <PackageReference Include="QuestPDF" Version="2025.7.4" />
     <PackageReference Include="System.Reactive" Version="6.1.0" />
-    <PackageReference Include="System.Text.Json" Version="8.0.0" />
+    <PackageReference Include="System.Text.Json" Version="10.0.0" />
     <PackageReference Include="Unity" Version="5.11.10" />
   </ItemGroup>
 
