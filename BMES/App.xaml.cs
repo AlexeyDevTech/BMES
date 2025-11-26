@@ -74,7 +74,6 @@ namespace BMES
             containerRegistry.RegisterSingleton<IWorkflowEngine, WorkflowEngine>();
             containerRegistry.RegisterSingleton<IOeeCalculatorService, OeeCalculatorService>();
             containerRegistry.RegisterSingleton<IProductionReportService, ProductionReportService>();
-            containerRegistry.RegisterSingleton<ISessionFactory, SessionFactory>();
         }
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)
         {

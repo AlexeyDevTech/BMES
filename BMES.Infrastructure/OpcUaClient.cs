@@ -17,7 +17,7 @@ namespace BMES.Infrastructure
         private readonly string _serverUrl;
         private readonly ILogger<OpcUaClient>? _logger;
         private readonly IEventAggregator _eventAggregator;
-        private ISession? _session;
+        private Session? _session;
         private readonly SemaphoreSlim _sessionLock = new SemaphoreSlim(1, 1);
         private readonly AsyncRetryPolicy _retryPolicy;
 
@@ -25,18 +25,15 @@ namespace BMES.Infrastructure
         private readonly ConcurrentBag<Subscription> _subscriptions = new ConcurrentBag<Subscription>();
         private bool _disposed = false;
 
-        private readonly ISessionFactory _sessionFactory;
-
-        public OpcUaClient(ILogger<OpcUaClient>? logger, IEventAggregator eventAggregator, ISessionFactory sessionFactory) : this("opc.tcp://localhost:54000", logger, eventAggregator, sessionFactory)
+        public OpcUaClient(ILogger<OpcUaClient>? logger, IEventAggregator eventAggregator) : this("opc.tcp://localhost:54000", logger, eventAggregator)
         {
         }
 
-        private OpcUaClient(string serverUrl, ILogger<OpcUaClient>? logger, IEventAggregator eventAggregator, ISessionFactory sessionFactory)
+        private OpcUaClient(string serverUrl, ILogger<OpcUaClient>? logger, IEventAggregator eventAggregator)
         {
             _serverUrl = serverUrl ?? throw new ArgumentNullException(nameof(serverUrl));
             _logger = logger;
             _eventAggregator = eventAggregator;
-            _sessionFactory = sessionFactory;
             _retryPolicy = Policy.Handle<Exception>()
                 .WaitAndRetryAsync(5, attempt => TimeSpan.FromSeconds(Math.Pow(2, attempt)),
                     (exception, timespan, context) =>
@@ -133,7 +130,7 @@ namespace BMES.Infrastructure
                 // updateBeforeConnect = false, sessionName = приложение, timeout берём из конфига.
                 uint sessionTimeout = (uint)Math.Max(10000, config.ClientConfiguration.DefaultSessionTimeout);
 
-                _session = await _sessionFactory.CreateAsync(
+                _session = await Session.Create(
                     config,
                     configuredEndpoint,
                     false,                       // updateBeforeConnect
@@ -197,20 +194,19 @@ namespace BMES.Infrastructure
                             {
                                 _logger?.LogWarning(exSub, "Failed to delete subscription while disconnecting.");
                             }
-                                                        finally
-                                                        {
-                                                                                                                            // попытка удалить у сессии (без исключений)
-                                                                                                                            try { await _session!.RemoveSubscriptionAsync(sub).ConfigureAwait(false); } catch { } // Pass subscription object, use null-forgiving operator
-                                                                                                                            try { sub.Dispose(); } catch { }
-                                                                                                                        }
-                                                                                                                    }
-                                                                                            
-                                                                                                                    // Close session gracefully
-                                                                                                                    await _session!.CloseAsync(cancellationToken).ConfigureAwait(false); // Use null-forgiving operator
-                                                                                                                    _session.Dispose();
-                                                                                                                    _session = null;
-                                                                                                                    _logger?.LogInformation("Disconnected from OPC UA server.");
-                                                                                                                }
+                            finally
+                            {
+                                // попытка удалить у сессии (без исключений)
+                                try { await _session!.RemoveSubscriptionAsync(sub).ConfigureAwait(false); } catch { } // Pass subscription object, use null-forgiving operator
+                                try { sub.Dispose(); } catch { }
+                            }
+                        }                                                             
+                        // Close session gracefully
+                        await _session!.CloseAsync(cancellationToken).ConfigureAwait(false); // Use null-forgiving operator
+                        _session.Dispose();
+                        _session = null;
+                        _logger?.LogInformation("Disconnected from OPC UA server.");
+                    }
                     catch (Exception ex)
                     {
                         _logger?.LogError(ex, "Disconnection failed.");
