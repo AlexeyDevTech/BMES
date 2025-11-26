@@ -73,8 +73,9 @@
                 VerticalAlignment="Center"
                 Orientation="Horizontal">
                 <ContentControl
+                    Width="30"
                     Padding="0,0,0,4"
-                    Content="{StaticResource LogoIcon}" Width="30" />
+                    Content="{StaticResource LogoIcon}" />
             </StackPanel>
             <Grid Grid.Column="1" HorizontalAlignment="Right">
                 <Grid.ColumnDefinitions>

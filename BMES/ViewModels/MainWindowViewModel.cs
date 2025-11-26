@@ -106,7 +106,13 @@ namespace BMES.ViewModels
         public DelegateCommand RecordQualityCommand { get; private set; }
         public DelegateCommand GenerateReportCommand { get; private set; }
 
-        public MainWindowViewModel(ICurrentUserService currentUserService, IAuditService auditService, IOpcUaService opcUaService, ITagConfigurationService tagConfigurationService, IMaterialLotRepository materialLotRepository, IOrderRepository orderRepository, IProductionReportService productionReportService)
+        public MainWindowViewModel(ICurrentUserService currentUserService, 
+            IAuditService auditService, 
+            IOpcUaService opcUaService, 
+            ITagConfigurationService tagConfigurationService, 
+            IMaterialLotRepository materialLotRepository, 
+            IOrderRepository orderRepository, 
+            IProductionReportService productionReportService)
         {
             _currentUser = currentUserService;
             _auditService = auditService;

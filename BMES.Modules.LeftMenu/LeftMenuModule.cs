@@ -2,7 +2,7 @@
 using BMES.Regions;
 using Prism.Ioc;
 using Prism.Modularity;
-using Prism.Regions;
+using Prism.Navigation.Regions;
 
 namespace BMES.Modules.LeftMenu
 {

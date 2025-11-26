@@ -1,7 +1,6 @@
 ﻿using BMES.Modules.Mimic.Views;
 using Prism.Ioc;
 using Prism.Modularity;
-using Prism.Regions;
 
 namespace BMES.Modules.Mimic
 {

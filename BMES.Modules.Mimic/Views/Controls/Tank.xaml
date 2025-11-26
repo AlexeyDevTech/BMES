@@ -1,12 +1,24 @@
-<UserControl x:Class="BMES.Modules.Mimic.Views.Controls.Tank"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" 
-             d:DesignHeight="100" d:DesignWidth="50">
+<UserControl
+    x:Class="BMES.Modules.Mimic.Views.Controls.Tank"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="100"
+    d:DesignWidth="50"
+    mc:Ignorable="d">
     <Grid>
-        <Rectangle Stroke="Black" StrokeThickness="1" Fill="LightGray" Margin="0,10,0,0"/>
-        <Rectangle Stroke="Black" StrokeThickness="1" Fill="Blue" VerticalAlignment="Bottom" Height="{Binding Level}" MaxHeight="90"/>
+        <Rectangle
+            Margin="0,10,0,0"
+            Fill="LightGray"
+            Stroke="Black"
+            StrokeThickness="1" />
+        <Rectangle
+            Height="{Binding Level}"
+            MaxHeight="90"
+            VerticalAlignment="Bottom"
+            Fill="Blue"
+            Stroke="Black"
+            StrokeThickness="1" />
     </Grid>
 </UserControl>

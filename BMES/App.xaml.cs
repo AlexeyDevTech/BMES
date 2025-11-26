@@ -18,6 +18,7 @@ using BMES.Modules.WorkflowEditor;
 using BMES.Views;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Opc.Ua.Client;
 using Prism.Ioc;
 using Prism.Modularity;
 using Serilog;
@@ -73,15 +74,15 @@ namespace BMES
             containerRegistry.RegisterSingleton<IWorkflowEngine, WorkflowEngine>();
             containerRegistry.RegisterSingleton<IOeeCalculatorService, OeeCalculatorService>();
             containerRegistry.RegisterSingleton<IProductionReportService, ProductionReportService>();
-            //containerRegistry.RegisterSingleton<ISessionFactory, SessionFactory>();
+            containerRegistry.RegisterSingleton<ISessionFactory, SessionFactory>();
         }
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)
         {
             base.ConfigureModuleCatalog(moduleCatalog);
-            //moduleCatalog.AddModule<HeaderModule>();
-            //moduleCatalog.AddModule<LeftMenuModule>();
+            moduleCatalog.AddModule<HeaderModule>();
+            moduleCatalog.AddModule<LeftMenuModule>();
             moduleCatalog.AddModule<ProductionViewerModule>();
-            //moduleCatalog.AddModule<MimicModule>();
+            moduleCatalog.AddModule<MimicModule>();
             moduleCatalog.AddModule<AlarmsModule>();
             moduleCatalog.AddModule<RecipesModule>();
             moduleCatalog.AddModule<GenealogyModule>();
