@@ -21,6 +21,9 @@
     <ProjectReference Include="..\BMES.Contracts\BMES.Contracts.csproj" />
     <ProjectReference Include="..\BMES.Modules.Mimic\BMES.Modules.Mimic.csproj" />
     <ProjectReference Include="..\BMES.Modules.Alarms\BMES.Modules.Alarms.csproj" />
+    <ProjectReference Include="..\BMES.Modules.Recipes\BMES.Modules.Recipes.csproj" />
+    <ProjectReference Include="..\BMES.Modules.Genealogy\BMES.Modules.Genealogy.csproj" />
+    <ProjectReference Include="..\BMES.Modules.WorkflowEditor\BMES.Modules.WorkflowEditor.csproj" />
   </ItemGroup>
 
   <ItemGroup>
