@@ -1,5 +1,6 @@
 using BMES.Core.Models;
 using Microsoft.EntityFrameworkCore;
+using BMES.Infrastructure.Persistence;
 
 namespace BMES.Infrastructure.Persistence
 {
@@ -28,6 +29,15 @@ namespace BMES.Infrastructure.Persistence
                 .HasValue<MonitorStep>("MonitorStep")
                 .HasValue<OperatorInstructionStep>("OperatorInstructionStep")
                 .HasValue<DataCollectionStep>("DataCollectionStep");
+
+            modelBuilder.Entity<ControlStep>()
+                .Property(cs => cs.Value)
+                .HasConversion<ObjectToJsonConverter>();
+
+            modelBuilder.Entity<RecipeParameter>()
+                .Property(rp => rp.Value)
+                .HasConversion<ObjectToJsonConverter>();
+
         }
     }
 }

@@ -1,12 +1,9 @@
 [
-  { "Name": "Mixer.Speed", "NodeId": "ns=2;s=Device1.Mixer.Speed" },
-  { "Name": "Tank1.Level", "NodeId": "ns=2;s=Device1.Tank1.Level" },
   { "Name": "TempOut", "NodeId": "ns=2;s=ModbusPLC.PLC.TempOut" },
   { "Name": "MidTemp", "NodeId": "ns=2;s=ModbusPLC.PLC.MidTemp" },
   { "Name": "Hudimity", "NodeId": "ns=2;s=ModbusPLC.PLC.Hudimity" },
   { "Name": "fc1Forward", "NodeId": "ns=2;s=ModbusPLC.PLC.fc1Forward" },
   { "Name": "fc2Forward", "NodeId": "ns=2;s=ModbusPLC.PLC.fc2Forward" },
   { "Name": "fc2Reverse", "NodeId": "ns=2;s=ModbusPLC.PLC.fc2Reverse" },
-  { "Name": "fc2Stop", "NodeId": "ns=2;s=ModbusPLC.PLC.fc2Stop" },
-  { "Name": "Boiler.HighTempAlarm", "NodeId": "ns=2;s=Boiler.HighTempAlarm" }
+  { "Name": "fc2Stop", "NodeId": "ns=2;s=ModbusPLC.PLC.fc2Stop" }
 ]

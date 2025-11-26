@@ -15,12 +15,12 @@ namespace BMES.Modules.ProductionViewer
         }
         public void OnInitialized(IContainerProvider containerProvider)
         {
-            _reg.RegisterViewWithRegion("ContentRegion", typeof(ProductionOrdersView));
+            _reg.RegisterViewWithRegion("ContentRegion", typeof(ProductionViewerView));
         }
 
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            containerRegistry.RegisterForNavigation<ProductionOrdersView>("ProductionOrders");
+            containerRegistry.RegisterForNavigation<ProductionViewerView>("ProductionViewer");
         }
     }
 }

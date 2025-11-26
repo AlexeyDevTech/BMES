@@ -229,8 +229,10 @@ namespace BMES.Modules.ProductionViewer.ViewModels
 
         private void SubscribeToTags()
         {
+
             try
             {
+
                 _opcUaManager.SubscribeToTag(_tagConfigService.GetNodeId("TempOut"));
                 _opcUaManager.SubscribeToTag(_tagConfigService.GetNodeId("MidTemp"));
                 _opcUaManager.SubscribeToTag(_tagConfigService.GetNodeId("Hudimity"));

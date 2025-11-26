@@ -330,7 +330,7 @@ namespace BMES.Infrastructure
             }
         }
 
-        public async void SubscribeToTag(string nodeId)
+        public void SubscribeToTag(string nodeId)
         {
             var subscription = _session.DefaultSubscription;
             var monitoredItem = new MonitoredItem(subscription.DefaultItem)
@@ -341,7 +341,7 @@ namespace BMES.Infrastructure
             };
             monitoredItem.Notification += OnMonitoredItemNotification;
             subscription.AddItem(monitoredItem);
-            await subscription.ApplyChangesAsync();
+            subscription.ApplyChanges();
         }
         private void OnMonitoredItemNotification(MonitoredItem item, MonitoredItemNotificationEventArgs e)
         {
@@ -349,7 +349,7 @@ namespace BMES.Infrastructure
             _eventAggregator.GetEvent<TagValueChangedEvent>().Publish(new TagValue(item.StartNodeId.ToString(), value));
         }
 
-        public async void SubscribeToAlarm(string nodeId, AlarmSeverity severity)
+        public void SubscribeToAlarm(string nodeId, AlarmSeverity severity)
         {
             var subscription = _session.DefaultSubscription;
             var monitoredItem = new MonitoredItem(subscription.DefaultItem)
@@ -361,7 +361,7 @@ namespace BMES.Infrastructure
             };
             monitoredItem.Notification += OnAlarmNotification;
             subscription.AddItem(monitoredItem);
-            await subscription.ApplyChangesAsync();
+            subscription.ApplyChanges();
         }
 
         private void OnAlarmNotification(MonitoredItem item, MonitoredItemNotificationEventArgs e)
@@ -382,6 +382,7 @@ namespace BMES.Infrastructure
             }
         }
 
+        //сейчас используется "SubsribeToTag", который не работает (см коммит "2dbe17fc")
         /// <summary>
         /// Создаёт подписку и мониторит значение nodeId. Возвращает IObservable дата-стрима значений.
         /// Асинхронная версия (чтобы не блокировать поток).
