@@ -387,7 +387,6 @@ namespace BMES.Infrastructure
         /// Создаёт подписку и мониторит значение nodeId. Возвращает IObservable дата-стрима значений.
         /// Асинхронная версия (чтобы не блокировать поток).
         /// </summary>
-        [Obsolete("Use SubscribeToTag instead.")]
         public async Task<IObservable<DataValue>> SubscribeAsync(string nodeId, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(nodeId)) throw new ArgumentNullException(nameof(nodeId));
