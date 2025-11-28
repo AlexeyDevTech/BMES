@@ -1,12 +1,15 @@
-using BMES.Contracts.Interfaces;
-using System;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using BMES.Core.Models;
-using Opc.Ua;
-using System.Collections.Generic;
-using Prism.Events;
 using BMES.Contracts.Events;
+using BMES.Contracts.Interfaces;
+using BMES.Core.Models;
+using Microsoft.Extensions.Logging;
+using Opc.Ua;
+using Prism.Events;
+using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Reactive.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace BMES.Infrastructure
 {
@@ -18,6 +21,9 @@ namespace BMES.Infrastructure
         private readonly ITagConfigurationService _tagConfigurationService;
         private readonly IOrderRepository _orderRepository;
         private readonly IEventAggregator _eventAggregator;
+        private static readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
+
+        private readonly ConcurrentDictionary<string, IObservable<object>> _subscriptions = new ConcurrentDictionary<string, IObservable<object>>();
 
         private Dictionary<string, (string State, DateTime Timestamp)> _equipmentLastKnownState = new Dictionary<string, (string State, DateTime Timestamp)>();
 
@@ -45,10 +51,10 @@ namespace BMES.Infrastructure
             return _opcUaClient.ConnectAsync();
         }
 
-        public void SubscribeToTag(string nodeId)
-        {
-            _opcUaClient.SubscribeToTag(nodeId);
-        }
+        //public void SubscribeToTag(string nodeId)
+        //{
+        //    _opcUaClient.SubscribeToTag(nodeId);
+        //}
 
         private async void OnTagValueChanged(TagValue tagValue)
         {
@@ -117,7 +123,36 @@ namespace BMES.Infrastructure
         {
             await _opcUaClient.WriteAsync(nodeId, value);
         }
+        public async Task<IObservable<T>> SubscribeAsync<T>(string nodeId)
+        {
+            if (_subscriptions.TryGetValue(nodeId, out var observable))
+            {
+                return observable.Cast<T>();
+            }
 
+            await _semaphore.WaitAsync();
+            try
+            {
+                if (_subscriptions.TryGetValue(nodeId, out observable))
+                {
+                    return observable.Cast<T>();
+                }
+
+                var newObservable = (await _opcUaClient.SubscribeAsync(nodeId))
+                    .Select(dataValue => Convert.ChangeType(dataValue.Value, typeof(T)))
+                    .Cast<object>()
+                    .Publish()
+                    .RefCount();
+
+                _subscriptions.TryAdd(nodeId, newObservable);
+
+                return newObservable.Cast<T>();
+            }
+            finally
+            {
+                _semaphore.Release();
+            }
+        }
         public async Task WriteTagAsync(string nodeId, object value)
         {
             if (value is bool boolValue)

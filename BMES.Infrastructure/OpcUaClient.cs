@@ -329,7 +329,7 @@ namespace BMES.Infrastructure
                 throw new OpcUaException("Write operation failed.", ex);
             }
         }
-
+        [Obsolete]
         public void SubscribeToTag(string nodeId)
         {
             var subscription = _session.DefaultSubscription;

@@ -14,6 +14,8 @@ namespace BMES.Modules.ProductionViewer.ViewModels
 {
     public class ProductionViewerViewModel : BindableBase, INavigationAware, IDisposable
     {
+        private const string PLCTag = "ModbusPLC.PLC";
+
         private readonly IOpcUaManager _opcUaManager;
         private readonly ITagConfigurationService _tagConfigService;
         private readonly IEventAggregator _eventAggregator;
@@ -218,28 +220,41 @@ namespace BMES.Modules.ProductionViewer.ViewModels
         {
         }
 
-        public void OnNavigatedTo(NavigationContext navigationContext)
+        public async void OnNavigatedTo(NavigationContext navigationContext)
         {
             IsConnected = _opcUaManager.IsConnected;
             if (IsConnected)
             {
-                SubscribeToTags();
+               await SubscribeToTags();
             }
         }
 
-        private void SubscribeToTags()
+        private async Task SubscribeToTags()
         {
 
             try
             {
 
-                _opcUaManager.SubscribeToTag(_tagConfigService.GetNodeId("TempOut"));
-                _opcUaManager.SubscribeToTag(_tagConfigService.GetNodeId("MidTemp"));
-                _opcUaManager.SubscribeToTag(_tagConfigService.GetNodeId("Hudimity"));
-                _opcUaManager.SubscribeToTag(_tagConfigService.GetNodeId("fc1Forward"));
-                _opcUaManager.SubscribeToTag(_tagConfigService.GetNodeId("fc2Forward"));
-                _opcUaManager.SubscribeToTag(_tagConfigService.GetNodeId("fc2Reverse"));
-                _opcUaManager.SubscribeToTag(_tagConfigService.GetNodeId("fc2Stop"));
+                _subscriptions.Add((await _opcUaManager.SubscribeAsync<double>($"ns=2;s={PLCTag}.TempOut"))
+                   .Subscribe(value => OutdoorTemperature = value / 10));
+
+                _subscriptions.Add((await _opcUaManager.SubscribeAsync<double>($"ns=2;s={PLCTag}.MidTemp"))
+                    .Subscribe(value => IndoorTemperature = value / 10));
+
+                _subscriptions.Add((await _opcUaManager.SubscribeAsync<int>($"ns=2;s={PLCTag}.Hudimity"))
+                    .Subscribe(value => TvoHumidity = value / 10));
+
+                _subscriptions.Add((await _opcUaManager.SubscribeAsync<bool>($"ns=2;s={PLCTag}.fc1Forward"))
+                    .Subscribe(value => Fc1Forward = value));
+
+                _subscriptions.Add((await _opcUaManager.SubscribeAsync<bool>($"ns=2;s={PLCTag}.fc2Forward"))
+                    .Subscribe(value => Fc2Forward = value));
+
+                _subscriptions.Add((await _opcUaManager.SubscribeAsync<bool>($"ns=2;s={PLCTag}.fc2Reverse"))
+                    .Subscribe(value => Fc2Backward = value));
+
+                _subscriptions.Add((await _opcUaManager.SubscribeAsync<bool>($"ns=2;s={PLCTag}.fc2Stop"))
+                    .Subscribe(value => Fc2Stop = value));
             }
             catch (Exception ex)
             {

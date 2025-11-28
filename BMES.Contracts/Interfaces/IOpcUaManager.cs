@@ -8,7 +8,8 @@ namespace BMES.Contracts.Interfaces
     {
         bool IsConnected { get; }
         Task ConnectAsync();
-        void SubscribeToTag(string nodeId);
+        Task<IObservable<T>> SubscribeAsync<T>(string nodeId);
+        //void SubscribeToTag(string nodeId);
         Task WriteAsync<T>(string nodeId, T value);
     }
 }

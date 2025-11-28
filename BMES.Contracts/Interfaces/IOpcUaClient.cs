@@ -13,7 +13,8 @@ namespace BMES.Contracts.Interfaces
         Task DisconnectAsync(CancellationToken cancellationToken = default);
         Task WriteAsync<T>(string nodeId, T value, CancellationToken cancellationToken = default);
         Task<T> ReadAsync<T>(string nodeId, CancellationToken cancellationToken = default);
-        void SubscribeToTag(string nodeId);
+        //void SubscribeToTag(string nodeId);
         void SubscribeToAlarm(string nodeId, AlarmSeverity severity);
+        Task<IObservable<DataValue>> SubscribeAsync(string nodeId, CancellationToken cancellationToken = default);
     }
 }
